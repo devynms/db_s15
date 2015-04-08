@@ -1,0 +1,15 @@
+Using Pyqt 5.
+	Installed from source. 
+	http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.4.1/PyQt-gpl-5.4.1.tar.gz
+
+Before installing, the following was done:
+1) python 2.7 was installed already
+2) installed package python-dev
+	'sudo apt-get install python-dev'
+3) Qt 5 installed with apt-get
+	'sudo apt-get install qt5-default'
+	'aputitude show qt5-default'
+4) Installed sip from source
+	http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.7/sip-4.16.7.tar.gz
+5) Finished instally Pyqt5 from source.
+	Instructions: http://pyqt.sourceforge.net/Docs/PyQt5/installation.html

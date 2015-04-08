@@ -1,0 +1,3 @@
+1) Consider the case when you might want to store a citation to a paper that doesn't actually exist in the database.
+
+2) Enforce the constraint that keyphrases must exist in papers, and that if they exist in papers they cannot be deleted. 

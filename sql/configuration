@@ -4,3 +4,6 @@
 Database configuration:
 	Default collation: utf8_general_ci
 	Default characterset: utf8
+
+Connector/Python configuration:
+	sudo pip install --allow-external mysql-connector-python \ mysql-connector-python

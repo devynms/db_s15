@@ -23,28 +23,30 @@ CREATE TABLE paper_authors (
 	paper_id	INTEGER NOT NULL,
     author_id	INTEGER NOT NULL,
     PRIMARY KEY (paper_id, author_id),
-    CONSTRAINT fk_paper
+    CONSTRAINT fk_authors_paper
 		FOREIGN KEY (paper_id)
         REFERENCES papers(id)
         ON DELETE CASCADE,
-	CONSTRAINT fk_author
+	CONSTRAINT fk_papers_author
 		FOREIGN KEY (author_id)
         REFERENCES authors(id)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE paper_citations (
 	citing_paper_id	INTEGER NOT NULL,
     cited_paper_id	INTEGER NOT NULL,
+    citation_text	TEXT NOT NULL,
     PRIMARY KEY (citing_paper_id, cited_paper_id),
     CONSTRAINT fk_citing_paper
 		FOREIGN KEY (citing_paper_id)
         REFERENCES papers(id)
-        ON DELETE CASCADE,
+        ON DELETE RESTRICT,
+	INDEX idx_cited_paper (cited_paper_id),
 	CONSTRAINT fk_cited_paper
 		FOREIGN KEY (cited_paper_id)
         REFERENCES papers(id)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE keyphrases (
@@ -60,12 +62,12 @@ CREATE TABLE paper_keyphrases (
     keyphrase_id	INTEGER NOT NULL,
     count			INTEGER NOT NULL,
     PRIMARY KEY (paper_id, keyphrase_id),
-    CONSTRAINT fk_paper
+    CONSTRAINT fk_keyphrases_paper
 		FOREIGN KEY (paper_id)
         REFERENCES papers(id)
         ON DELETE CASCADE,
-	CONSTRAINT fk_keyphrase
+	CONSTRAINT fk_papers_keyphrase
 		FOREIGN KEY (keyphrase_id)
         REFERENCES keyphrases(id)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 );

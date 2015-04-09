@@ -5,7 +5,47 @@ CREATE TABLE authors (
 
 CREATE TABLE publishers (
     name	VARCHAR(255) NOT NULL,
+    address	TEXT NULL,
     PRIMARY KEY (name)
+);
+
+CREATE TABLE releases (
+	id		INTEGER NOT NULL AUTO_INCREMENT,
+    pubdate	DATE NOT NULL,
+    publisher_name	VARCHAR (255) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_releases_publisher
+		FOREIGN KEY (publisher_name)
+        REFERENCES publishers(name)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE journals (
+	release_id	INTEGER NOT NULL,
+    volume		INTEGER NOT NULL,
+    issue		INTEGER NOT NULL,
+    PRIMARY KEY (release_id),
+    CONSTRAINT fk_journals_release
+		FOREIGN KEY (release_id)
+        REFERENCES releases(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE conferences (
+	release_id	INTEGER NOT NULL,
+    location	TEXT NOT NULL,
+    keynote_speaker	VARCHAR(255) NULL,
+    PRIMARY KEY (release_id),
+    CONSTRAINT fk_conferences_release
+		FOREIGN KEY (release_id)
+        REFERENCES releases(id)
+        ON DELETE CASCADE,
+	CONSTRAINT fk_conferences_keynote_speaker
+		FOREIGN KEY (keynote_speaker)
+        REFERENCES authors(name)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE papers (
@@ -20,6 +60,7 @@ CREATE TABLE papers (
 		FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
         ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE paper_authors (
@@ -34,6 +75,7 @@ CREATE TABLE paper_authors (
 		FOREIGN KEY (author_name)
         REFERENCES authors(name)
         ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE paper_citations (

@@ -60,6 +60,7 @@ CREATE TABLE journals (
     FOREIGN KEY (release_id)
         REFERENCES releases(id)
         ON DELETE CASCADE
+        ON UPDATE RESTRICT
 );
 
 CREATE TABLE conferences (
@@ -69,7 +70,8 @@ CREATE TABLE conferences (
     PRIMARY KEY (release_id),
     FOREIGN KEY (release_id)
         REFERENCES releases(id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT,
 	FOREIGN KEY (keynote_speaker)
         REFERENCES authors(name)
         ON DELETE SET NULL
@@ -78,16 +80,21 @@ CREATE TABLE conferences (
 
 CREATE TABLE papers (
 	id				INTEGER NOT NULL AUTO_INCREMENT,
+    release_id		INTEGER NULL,
     title			VARCHAR(255) NOT NULL,
     published_date	DATE NOT NULL,
-    publisher_name	VARCHAR (255),
+    publisher_name	VARCHAR (255) NOT NULL,
     published_time	TIME,
     abstract		TEXT,
     PRIMARY KEY (id),
     FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+	FOREIGN KEY (release_id)
+		REFERENCES releases(id)
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT
 );
 
 CREATE TABLE paper_topics (
@@ -96,7 +103,8 @@ CREATE TABLE paper_topics (
     PRIMARY KEY (paper_id, topic),
     FOREIGN KEY (paper_id)
 		REFERENCES papers(id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT,
 	FOREIGN KEY (topic)
 		REFERENCES topics(topic_text)
         ON DELETE RESTRICT
@@ -109,7 +117,8 @@ CREATE TABLE paper_authors (
     PRIMARY KEY (paper_id, author_name),
     FOREIGN KEY (paper_id)
         REFERENCES papers(id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT,
 	FOREIGN KEY (author_name)
         REFERENCES authors(name)
         ON DELETE RESTRICT
@@ -123,10 +132,12 @@ CREATE TABLE paper_citations (
     PRIMARY KEY (citing_paper_id, cited_paper_id),
     FOREIGN KEY (citing_paper_id)
         REFERENCES papers(id)
-        ON DELETE RESTRICT,
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
 	FOREIGN KEY (cited_paper_id)
         REFERENCES papers(id)
         ON DELETE RESTRICT
+        ON UPDATE RESTRICT
 );
 
 CREATE TABLE keyphrases (
@@ -141,8 +152,10 @@ CREATE TABLE paper_keyphrases (
     PRIMARY KEY (paper_id, keyphrase),
     FOREIGN KEY (paper_id)
         REFERENCES papers(id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT,
 	FOREIGN KEY (keyphrase)
         REFERENCES keyphrases(phrase)
         ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );

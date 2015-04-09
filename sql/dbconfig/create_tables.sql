@@ -5,9 +5,8 @@ CREATE TABLE authors (
 );
 
 CREATE TABLE publishers (
-	id		INTEGER NOT NULL AUTO_INCREMENT,
     name	VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE papers (
@@ -26,15 +25,15 @@ CREATE TABLE papers (
 
 CREATE TABLE paper_authors (
 	paper_id	INTEGER NOT NULL,
-    author_id	INTEGER NOT NULL,
+    author_name	VARCHAR(255) NOT NULL,
     PRIMARY KEY (paper_id, author_id),
     CONSTRAINT fk_authors_paper
 		FOREIGN KEY (paper_id)
         REFERENCES papers(id)
         ON DELETE CASCADE,
 	CONSTRAINT fk_papers_author
-		FOREIGN KEY (author_id)
-        REFERENCES authors(id)
+		FOREIGN KEY (author_name)
+        REFERENCES authors(name)
         ON DELETE RESTRICT
 );
 

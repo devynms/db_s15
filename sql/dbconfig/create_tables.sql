@@ -1,7 +1,6 @@
 CREATE TABLE authors (
-	id		INTEGER NOT NULL AUTO_INCREMENT,
     name	VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE publishers (
@@ -13,20 +12,20 @@ CREATE TABLE papers (
 	id				INTEGER NOT NULL AUTO_INCREMENT,
     title			VARCHAR(255) NOT NULL,
     published_date	DATE NOT NULL,
-    publisher_id	INTEGER NULL,
+    publisher_name	VARCHAR (255) NOT NULL,
     published_time	TIME,
     abstract		TEXT,
     PRIMARY KEY (id),
     CONSTRAINT fk_papers_publisher
-		FOREIGN KEY (publisher_id)
-        REFERENCES publishers(id)
+		FOREIGN KEY (publisher_name)
+        REFERENCES publishers(name)
         ON DELETE RESTRICT
 );
 
 CREATE TABLE paper_authors (
 	paper_id	INTEGER NOT NULL,
     author_name	VARCHAR(255) NOT NULL,
-    PRIMARY KEY (paper_id, author_id),
+    PRIMARY KEY (paper_id, author_name),
     CONSTRAINT fk_authors_paper
 		FOREIGN KEY (paper_id)
         REFERENCES papers(id)
@@ -54,24 +53,21 @@ CREATE TABLE paper_citations (
 );
 
 CREATE TABLE keyphrases (
-	id		INTEGER NOT NULL AUTO_INCREMENT,
 	phrase	VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id),
-    INDEX idx_phrase (phrase),
-    UNIQUE (phrase)
+    PRIMARY KEY (phrase)
 );
 
 CREATE TABLE paper_keyphrases (
-	paper_id		INTEGER NOT NULL,
-    keyphrase_id	INTEGER NOT NULL,
-    count			INTEGER NOT NULL,
-    PRIMARY KEY (paper_id, keyphrase_id),
+	paper_id	INTEGER NOT NULL,
+    keyphrase	VARCHAR(255) NOT NULL,
+    count		INTEGER NOT NULL,
+    PRIMARY KEY (paper_id, keyphrase),
     CONSTRAINT fk_keyphrases_paper
 		FOREIGN KEY (paper_id)
         REFERENCES papers(id)
         ON DELETE CASCADE,
 	CONSTRAINT fk_papers_keyphrase
-		FOREIGN KEY (keyphrase_id)
-        REFERENCES keyphrases(id)
+		FOREIGN KEY (keyphrase)
+        REFERENCES keyphrases(phrase)
         ON DELETE RESTRICT
 );

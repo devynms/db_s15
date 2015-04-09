@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS topic_subtopics;
+
+DROP TABLE IF EXISTS release_topics;
+
+DROP TABLE IF EXISTS topics;
+
 DROP TABLE IF EXISTS journals;
 
 DROP TABLE IF EXISTS conferences;

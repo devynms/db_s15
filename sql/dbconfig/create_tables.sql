@@ -1,3 +1,22 @@
+CREATE TABLE topics (
+	topic_text	VARCHAR(255) NOT NULL,
+    PRIMARY KEY (topic_text)
+);
+
+CREATE TABLE topic_subtopics (
+	parent_topic	VARCHAR(255) NOT NULL,
+    subtopic		VARCHAR(255) NOT NULL,
+    PRIMARY KEY (subtopic),
+    FOREIGN KEY (parent_topic)
+		REFERENCES topics(topic_text)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+	FOREIGN KEY (subtopic)
+		REFERENCES topics(topic_text)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
 CREATE TABLE authors (
     name	VARCHAR(255) NOT NULL,
     PRIMARY KEY (name)
@@ -17,6 +36,19 @@ CREATE TABLE releases (
     CONSTRAINT fk_releases_publisher
 		FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE release_topics (
+	release_id	INTEGER NOT NULL,
+    topic		VARCHAR(255) NOT NULL,
+    PRIMARY KEY (release_id, topic),
+    FOREIGN KEY (release_id)
+		REFERENCES releases(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (topic)
+		REFERENCES topics(topic_text)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
@@ -59,6 +91,19 @@ CREATE TABLE papers (
     CONSTRAINT fk_papers_publisher
 		FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE paper_topics (
+	paper_id	INTEGER NOT NULL,
+    topic		VARCHAR(255) NOT NULL,
+    PRIMARY KEY (paper_id, topic),
+    FOREIGN KEY (paper_id)
+		REFERENCES papers(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (topic)
+		REFERENCES topics(topic_text)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 );

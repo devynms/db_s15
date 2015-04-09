@@ -87,6 +87,8 @@ CREATE TABLE papers (
     published_time	TIME,
     abstract		TEXT,
     PRIMARY KEY (id),
+    INDEX (title),
+    UNIQUE(title),
     FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
         ON DELETE RESTRICT

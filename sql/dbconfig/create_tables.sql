@@ -130,7 +130,7 @@ CREATE TABLE paper_authors (
 CREATE TABLE paper_citations (
 	citing_paper_id    INTEGER NOT NULL,
     cited_paper_title  VARCHAR (255) NOT NULL,
-    PRIMARY KEY (citing_paper_id, cited_paper_id),
+    PRIMARY KEY (citing_paper_id, cited_paper_title),
     FOREIGN KEY (citing_paper_id)
         REFERENCES papers(id)
         ON DELETE RESTRICT

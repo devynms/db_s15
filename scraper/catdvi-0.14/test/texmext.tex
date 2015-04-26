@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\begin{document}
+
+\section*{Some problems for the DVI class}
+
+\begin{enumerate}
+\item
+Let $f$ be a real-valued, nonnegative function on the positive half-axis.
+For every positive integer $i$, put $a_i := f(i)$.
+Assume that $f$ is monotonically decreasing. Then
+$\sum_{i=1}^{\infty} a_i$ is finite iff $\int_1^{\infty} f(x)\,dx$ is.
+
+\item
+And here's a harder one: consider nonnegative solutions $\epsilon$,
+$\delta$ of the equation
+\[
+\bigg(1 + \epsilon \Big(1 + \epsilon \big(1 + \epsilon (1 + \epsilon
+    ) \big) \Big) \bigg) =
+\sqrt{1 + \delta \sqrt {1 + \delta \sqrt {1 + \delta \sqrt{1 + \delta}}}}
+\]
+Is it true (and if so, in which sense) that $\epsilon \ll \delta$ as
+$\delta \rightarrow 0$ ? What happens if the equation is changed to
+\[
+\bigg(1 + \epsilon \Big(1 + \epsilon \big(1 + \epsilon (1 + \epsilon
+    )^2 \big)^2 \Big)^2 \bigg)^2 =
+\sqrt[4]{1 + \delta \sqrt[4] {1 + \delta \sqrt[4] {1 + \delta \sqrt[4]{1 + \delta}}}}
+\]
+
+\item
+Prove that the series
+\[
+\sum_{n=1}^{\infty} \frac{(-1)^n\,n}{(n+1)^2}
+\]
+does converge. (Hint: don't try to use problem 1).
+\end{enumerate}
+Solutions have to be submitted by yesterday, 0730~AM at my office in
+ascii, latin1 and utf-8 encoding.
+
+\end{document}

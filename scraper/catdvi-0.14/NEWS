@@ -1,0 +1,93 @@
+                                                  -*- Text -*-
+
+0.14 - More powerful layout algorithm with enhanced vertical positioning
+       capabilities and better handling of sub- and superscripts in
+       mathematical formulae.
+     - New font encodings: all AMS fonts except the cyrillic ones.
+     - Completed Blackboard font encoding.
+     - Brought in line with Unicode 3.2.
+     - Fixed false out of memory errors on some systems (e.g. AIX 4.2).
+     - Several small fixes and improvements.
+
+0.13 - New font encoding `LaTeX symbols'.
+     - Three new font encodings offering the European currency symbol:
+         + Henrik Theilings European currency symbol (`eurosym') font
+         + TS1, the encoding of the TeX text companion fonts
+         + Martin Vogels symbol (`MarVoSym') font
+     - New output encoding ISO-8859-15, which offers the Euro symbol.
+     - The --output-encoding option now accepts descriptive names (but still
+       understands encoding numbers as well).
+     - Some bug fixes.
+
+0.12 - Page range selectable by command line options.
+     - Improved OML, OMS, OMX and Cork input font encodings.
+     - Try to diplay hanging glyphs (e.g. operators and radicals) at the
+       visually correct position. Improves math.
+     - Translate more Unicode glyphs to available equivalents for ASCII and
+       ISO-8859-1 output encodings.
+     - New, more flexible output encoding handler gets width of ligatures
+       right.
+     - Building without GNU make should be easier now.
+     - Some bug fixes and speedups.
+     - Fixed building on FreeBSD (and maybe other systems).
+
+0.11 - Sequential processing option
+     - New font encoding: TeX Typewriter Text
+     - New, much better alignment algorithm
+     - Some bug fixes.
+
+0.10 - Added a manual page.
+     - More build system tweaks (no more missing glyph warnings for
+       regular builds)
+
+0.9 - More build system development. Should now be up for debianization.
+
+0.8 - Improved build system (uses autoconf)
+
+0.7 - Bug fix: dimension scaling was fucked up
+
+0.6 - New option --copyright.
+
+    - Remove option -v; leave --version.
+
+    - Use private space to map characters that are not in Unicode,
+      such as SS, NG and ng.
+
+    - Added the test/ subirectory.
+
+    - Added a partially filled translation table for Blackboard encoding
+
+    - Wrote a lite version of the new layout algorithm.
+
+    - TFM file parsing code is now almost finished
+
+
+0.5 - Bug fixes:
+        * catdvi.c (main): Mention -d in the --help output
+        * outenc.c (oen_tbl): Add the missing comma between 
+          the ASCII and Latin-1 entries.
+        * GNUmakefile (distclean, maintainer-clean): Include
+          enc/*.h files in the distribution.
+
+
+0.4 - Output routines for US-ASCII and ISO 8859-1
+
+    - Easy way to generate font encoding translation tables from DVIPS
+      .enc files.
+
+    - Translation tables for the Cork encoding and most of Knuth's font encodings,
+      with occasional unknown glyph.
+
+    - Option parsing.  (Current options: -dehv)
+
+    - Font encoding is now found by reading the TFM; the TFM file is
+      found with help from kpathsea.
+
+    - New build system.
+
+
+0.3 - Use Unicode internally
+
+    - output Unicode
+
+    - translate OT1 to Unicode

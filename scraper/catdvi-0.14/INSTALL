@@ -1,0 +1,59 @@
+                                                  -*- Text -*-
+
+This file describes how to build and install CatDVI version 0.14.
+
+
+REQUIREMENTS:
+
+  * a hosted ISO C (1990) environment
+
+  * the kpathsea library (installed) and accompanying header files
+
+  * only when building from CVS (if you don't know what that means then
+    you aren't): GNU autoconf
+
+Attention:
+  * For GNU/Linux users: with most distributions, it is not enough to have
+    TeX installed; the kpathsea headers are usually contained in an extra
+    package called "libkpathsea-dev" or "tetex-devel" or similar.
+
+  * For teTeX users: there were (are?) some teTeX pre-built binary tarballs
+    with statically linked libkpathsea in existence that did (do?) not include
+    the necessary development files. These will not work.
+
+  * Cross compiling catdvi does not work at the moment.
+
+
+IF YOU HAVE GNU MAKE AND A POSIX SHELL ENVIRONMENT:
+
+This is the easiest way. Note you need _GNU_ make. Really.
+
+  * Only when building from CVS:
+    	autoconf
+
+  * On systems where "make" is GNU make (e.g. Linux):
+	./configure [options]
+	make
+	make install
+
+  * On systems where "make" is not GNU make, but GNU make is available under
+    a different name (e.g. *BSD). The customary name is then "gmake".
+    Assuming this name:
+	MAKE=gmake ./configure [options]
+	gmake
+	gmake install
+
+The options to configure are standard. Type
+    ./configure --help
+for a list.
+
+
+OTHERWISE:
+
+A simple bourne shell script "build.sh" is included in the distribution tarball.
+Edit to your needs and run. Then install the resulting catdvi executable and
+(perhaps) the catdvi.1 man page to appropriate places.
+
+Even if you don't have a bourne shell compatible /bin/sh, it is fairly easy
+to understand what the script does and to adapt it to your environment or
+execute the necessary steps manually.

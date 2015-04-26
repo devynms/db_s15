@@ -1,0 +1,371 @@
+.TH CATDVI 1 "8 November 2002"
+.SH NAME
+catdvi \- a DVI to plain text converter
+.\"
+.\"
+.\"
+.SH SYNOPSIS
+.B catdvi
+[\fB\-d\ \fIdebuglevel\fB, \-\-debug=\fIdebuglevel\fR]
+[\fB\-e\ \fIoutenc\fB, \-\-output-encoding=\fIoutenc\fR]
+[\fB\-p\ \fIpagespec\fB, \-\-first-page=\fIpagespec\fR]
+[\fB\-l\ \fIpagespec\fB, \-\-last-page=\fIpagespec\fR]
+.RB [ \-N,
+.BR \-\-list-page-numbers ]
+.RB [ \-s,
+.BR \-\-sequential ]
+.RB [ \-U,
+.BR \-\-show-unknown-glyphs ]
+.RB [ \-h,
+.BR \-\-help ]
+.RB [ \-\-version ]
+.RB [ \-\-copyright ]
+.RI [ dvi-file ]
+.br
+.\"
+.\"
+.\"
+.SH DESCRIPTION
+This manual page documents
+.B catdvi
+version 0.14
+.PP
+.B catdvi
+reads the
+.SM DVI
+(typesetter DeVice Independent) file
+.I dvi-file
+and dumps a plain text approximation of the document it describes to stdout.
+If the argument
+.I dvi-file
+is omitted or a dash (`\-'),
+.B catdvi
+will read from stdin.
+Several
+.I output encodings
+(different character sets of the plain text output) are supported,
+most notably
+.SM UTF-8.
+.PP
+The current version of
+.B catdvi
+is a work in progress;
+it may not be robust enough for production use,
+but already works fine with linear english text.
+Many mathematical symbols (e.g.\& the uppercase greek letters)
+and moderately complex formulae also come out right.                            
+.PP 
+The program needs to read the
+.SM TFM
+(Tex Font Metric) files corresponding to the fonts used in the
+.SM DVI
+file.
+These are searched (and, if necessary and possible, created on the
+fly) through the
+.I Kpathsea
+library.
+.PP
+In order to correctly translate a
+.SM DVI
+file to text, the
+.I input encoding
+of the fonts used in it (i.e. a meaning-preserving mapping from
+font code points to Unicode) must be known. There are a lot of different
+font encodings in use. At the time of writing,
+.B catdvi
+understands the following input encodings:
+.TP
+`TEX TEXT'
+Knuth's original font encoding, also known as OT1.
+.TP
+`TEX TEXT WITHOUT F-LIGATURES'
+A variant of the above.
+.TP
+`EXTENDED TEX FONT ENCODING \- LATIN'
+The Cork encoding, also known as T1.
+.TP
+`TEX MATH ITALIC'
+The encoding of Knuth's math italic fonts, also known as OML.
+.TP
+`TEX MATH SYMBOLS'
+The encoding of Knuth's math symbol fonts, also known as OMS.
+.TP
+`TEX MATH EXTENSION' (most of it)
+The encoding of Knuth's math extension fonts (big operators, brackets, etc.),
+also known as OMX.
+.TP
+`TEX TYPEWRITER TEXT'
+The encoding of Knuth's typewriter type fonts.
+.TP
+`LATEX SYMBOLS'
+The encoding of the lasy fonts.
+.TP
+Henrik Theilings European currency symbol (`eurosym') font.
+.TP
+`TEX TEXT COMPANION SYMBOLS 1---TS1' (almost everything)
+The encoding of the text companion fonts.
+.TP
+Martin Vogels symbol (`MarVoSym') font.
+Both the 1998 and the 2000 version are supported as far as possible --
+about half of the symbols are not representable in Unicode.
+.TP
+`BLACKBOARD'
+The encoding of the blackboard bold math (`bbm') fonts.
+.TP
+All AMS fonts except the Cyrillic ones.
+This includes the AMS math symbols group A and group B, Euler fraktur,
+Euler cursive, Euler script and Euler compatible extension fonts.
+.PP
+It is impossible to do perfect translation from unmarked-up
+.SM DVI
+to plain text,
+since the former does only describe the layout of a page,
+and a translator such as this should really know where words and
+paragraphs end, and more importantly, which glyphs should be aligned
+vertically and which shouldn't.
+The current alignment algorithm tries to preserve the relative
+horizontal positions of word beginnings; this works well in most cases.
+Word breaks are detected using simple heuristics;
+paragraphs are not detected at all (and no paragraph fill is attempted).
+.PP
+The price of alignment is that the output will likely be more than 80
+columns wide, even though
+.B catdvi
+tries very hard not to use more columns than strictly necessary.
+Output is usually less than 120 columns, almost always less than 132
+columns wide. It may be a good idea to switch your terminal to one of
+these modes if possible.
+.PP
+.\"
+.\"
+.\"
+.SH OPTIONS
+The program follows the usual GNU command line syntax, with long
+options starting with two dashes.
+.TP
+.BI \-d\  debuglevel ,\ \-\-debug= debuglevel
+Set the debug output level to
+.I debuglevel
+(default is 10).
+Large values will result in lots of debug output, 0 in none at all.
+The maximal debug output level currently used is 150.
+.\"
+.\"
+.TP
+.BI \-e\  outenc ,\ \-\-output-encoding= outenc
+Specify the encoding of the output character set.
+.I outenc
+can be one of the numbers or names from the table below.
+Names are case insensitive.
+The following output encodings should be available:
+.br
+\&
+.br
+0:\ UTF-8
+.br
+1:\ US-ASCII
+.br
+2:\ ISO-8859-1                                         
+.br
+3:\ ISO-8859-15                                         
+.br
+\&
+.br
+The command
+.B catdvi \-\-help
+(see below) will give a more up-to-date list of all compiled-in output
+encodings. The default encoding is 1.
+.\"
+.\"
+.TP
+.BI \-p\  pagespec ,\ \-\-first-page= pagespec
+Do not output pages before page
+.IR pagespec .
+Pages can be specified in three different ways; the first two
+are exactly the same as for
+.BR dvips (1).
+.RS
+.PP
+A (possibly negative) number
+.I num
+specifies a TeX page number, which is stored as the so-called
+.I count0
+value in the
+.SM DVI
+file for every page.
+Plain TeX uses negative page numbers for roman-numbered frontmatter
+(title page, preface,
+.SM TOC,
+etc.) so the
+.I count0
+values compare as
+.RS
+-1 < -2 < -3 < ... < 1 < 2 < 3 < ...
+.RE
+There may be several pages with the same
+.I count0
+value in a single
+.SM DVI
+file. This usually happens in documents with a per-chapter page numbering
+scheme.
+.PP
+A number prefixed by an equals sign
+.RI (`= num ')
+specifies a physical page, i\.e\. the
+.IR num -th
+page appearing in the
+.SM DVI
+file. Numbering starts with 1.
+Note that with the long form of the option you actually need
+.I two
+equals signs, one as part of the long option and one as part of the
+page specification. Example:
+.RS
+.B catdvi
+\-\-first-page==5 foo.dvi
+.RE
+.PP
+The third form of a page specification, two numbers separated by a colon
+.RI (` num1 : num2 '),
+is useful for documents with separately-numbered parts, e.g. chapters.
+It refers to the page with
+.I count0
+value equal to
+.I num2
+that
+.B catdvi
+believes to be in part
+.IB num1 .
+Since those part numbers are not stored in the
+.SM DVI
+file, the program has to guess them:
+an internal
+.I chapter
+counter is increased by one every time
+the
+.I count0
+value of the current page is not greater (in above ordering) than that
+of the previous page.
+The counter is initialized to 1 if the first page
+has negative
+.I count0
+value and to 0 otherwise. (A document with separately numbered parts
+will probably have separately numbered frontmatter as well, and then this
+rule keeps the internal counter equal to
+real world part numbers.)
+.RE
+.\"
+.\"
+.TP
+.BI \-l\  pagespec ,\ \-\-last-page= pagespec
+Do not output pages after page
+.IR pagespec .
+Pages are specified exactly as for the
+.B \-\-first-page
+option above.
+.\"
+.\"
+.TP
+.B \-N, \-\-list-page-numbers
+Instead of the contents of pages, output their
+physical page count,
+.I count0
+value and
+.I chapter
+count (see the
+.B \-\-first-page
+option above for a definition of these).
+.\"
+.\"
+.TP
+.B \-s, \-\-sequential
+Do not attempt to reproduce the page layout;
+output glyphs in the order they appear in the
+.SM DVI
+file. This may be useful with e.g. multi-column page layouts.
+.\"
+.\"
+.TP
+.B \-U, \-\-show-unknown-glyphs
+Show the Unicode number of unknown glyphs instead of `?'.
+.\"
+.\"
+.TP
+.B \-h, \-\-help
+Show usage information and a list of available output encodings,
+then exit.
+.\"
+.\"
+.TP
+.B \-\-version
+Show version information and exit.
+.\"
+.\"
+.TP
+.B \-\-copyright
+Show copyright information and exit.                                           
+.\"
+.\"
+.\"
+.SH ENVIRONMENT
+The usual environment variables TFMFONTS, TEXFONTS, etc.\& for
+.I Kpathsea
+font search and creation apply.
+Refer to the
+.I Kpathsea
+documentation for details.
+.\"
+.\"
+.\"
+.SH "SEE ALSO"
+.BR xdvi (1),
+.BR dvips (1),
+.BR tex (1),
+.BR mktextfm (1),
+the
+.I Kpathsea
+texinfo documentation,
+.BR utf-8 (7).
+.\"
+.\"
+.\"
+.SH BUGS
+These things do not work (yet):
+.IP \(bu
+No rules are converted.
+.IP \(bu
+Extensible recipes (very large brackets, braces, etc. built out of several
+smaller pieces) are not properly handled.
+.IP \(bu
+Complicated math formulae are sometimes misaligned (mostly due to lack
+of appropriate word break heuristics).
+.IP \(bu
+Some fonts and font encodings are not recognised yet.
+.IP \(bu
+Most mathematical symbols have no representation in the available
+output character sets except Unicode, and hence show up as `?' unless
+.SM UTF-8
+output encoding is selected. A textual transcription would be desirable.
+.LP
+Watch out for these:
+.IP \(bu
+If there is a space where it does not belong or if there is no space
+where there should be one,
+report this as a bug (send the
+.SM DVI
+file to the
+.B catdvi
+maintainer, stating where in the file the bug is seen).
+.\"
+.\"
+.\"
+.SH AUTHORS
+.B catdvi
+was written by
+Antti-Juhani Kaijanaho <gaia@iki.fi>,
+based on a skeletal version by J.H.M.\ Dassen (Ray).
+Bjoern Brill <brill@fs.math.uni-frankfurt.de>
+did further improvements and currently maintains the program.
+.PP
+The manual page was compiled by Bjoern Brill, using
+material written by the first two program authors.

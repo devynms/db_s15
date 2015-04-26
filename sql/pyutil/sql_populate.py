@@ -75,9 +75,9 @@ class AcademicPaper:
 # subtopics: a map from topic -> subtopic (both are strings < 255 chars)
 def sql_structures_from_papers (academic_papers, subtopics):
 	struct = {}
-	struct['topics'] = Set()		# a set of topic strings
+	struct['topics'] = set()		# a set of topic strings
 	struct['topic_subtopics'] = subtopics	# map from subtopic to topic
-	struct['authors'] = Set()		# a set of author names
+	struct['authors'] = set()		# a set of author names
 	struct['publishers'] = {}		# a map name to optional address
 	struct['releases'] = {}			# a map id to (pubdate, pubtime?, pubname)
 	struct['release_topics'] = set()# a set of (release id, topic string)
@@ -156,4 +156,155 @@ def sql_structures_from_papers (academic_papers, subtopics):
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con
 def publish_sql_structures (sql_con, sql_structures):
-	pass
+	topics_query = "INSERT INTO topics VALUES "
+	topic_subtopics_query = "INSERT INTO topic_subtopics VALUES "
+	authors_query = "INSERT INTO authors VALUES "
+	publishers_query = "INSERT INTO publishers VALUES "
+	releases_query = "INSERT INTO releases VALUES "
+	release_topics_query = "INSERT INTO release_topics VALUES "
+	journals_query = "INSERT INTO journals VALUES "
+	conferences_query = "INSERT INTO conferences VALUES "
+	papers_query = "INSERT INTO papers VALUES "
+	paper_topics_query = "INSERT INTO paper_topics VALUES "
+	paper_authors_query = "INSERT INTO paper_authors VALUES "
+	paper_citations_query = "INSERT INTO paper_citations VALUES "
+	keyphrases_query = "INSERT INTO keyphrases VALUES "
+	paper_keyphrases_query = "INSERT INTO paper_keyphrases VALUES "
+
+	# topics
+	for _ in xrange(count(sql_structures['topics']) - 1):
+		topics_query += "(%s),"
+	topics_query += "(%s);"
+	topics_tuple = tuple(sql_structures['topcs'])
+
+	# topics_subtopics
+	# TODO
+
+	# authors
+	for _ in xrange(count(sql_structures['authors']) - 1):
+		authors_query += "(%s),"
+	authors_query += "(%s);"
+	authors_tuple = tuple(sql_structures['authors'])
+
+	# publishers (name -> address)
+	publishers_list = []
+	for (name, addr) in sql_structures['publishers'].items():
+		publishers_list.add(name) # add name
+		if addr:
+			publishers_list.add(name)
+		else:
+			publishers_list.add("NULL")
+	publishers_tuple = tuple(publishers_list)
+	for _ in xrange(count(sql_structures['publishers'].items()) - 1):
+		publishers_query += "(%s, %s),"
+	publishers_query += "(%s, %s);"
+
+	# releases (id -> (pubdate, pubtime? pubname))
+	releases_list = []
+	for (rid, attrs) in sql_structures['releases'].items():
+		releases_list.add(rid)
+		releases_list.add(attrs[0])
+		if attrs[1]:
+			releases_list.add(attrs[1])
+		else:
+			releases_list.add("NULL")
+		releases_list.add(attrs[2])
+	releases_tuple = tuple(releases_list)
+	for _ in xrange(count(sql_structures['releases'].items()) - 1):
+		releases_query += "(%s, %s, %s, %s),"
+	releases_query += "(%s, %s, %s, %s);"
+
+	# release_topics (release_id, topics_string)
+	for _ in xrange(count(sql_structures['release_topics']) - 1):
+		release_topics_query += "(%s, %s),"
+	release_topics_query += "(%s, %s);"
+	release_topics_list = []
+	for attrs in sql_structures['release_topics']:
+		release_topics_list.add(attrs[0])
+		release_topics_list.add(attrs[1])
+	release_topics_tuple = tuple(release_topics_list)
+
+	# journals (id -> (name, volume, issue))
+	journals_list = []
+	for (rid, attrs) in sql_structures['journals'].items():
+		releases_list.add(rid)
+		releases_list.add(attrs[0])
+		releases_list.add(attrs[1])
+		releases_list.add(attrs[2])
+	journals_tuple = tuple(journals_list)
+	for _ in xrange(count(sql_structures['journals'].itmes()) - 1):
+		journals_query += "(%s, %s, %s, %s),"
+	journals_query += "(%s, %s, %s, %s);"
+
+	# conferences (id -> (name, loc, speaker))
+	conferences_list = []
+	for (rid, attrs) in sql_structures['conferences'].items():
+		releases_list.add(rid)
+		releases_list.add(attrs[0])
+		releases_list.add(attrs[1])
+		releases_list.add(attrs[2])
+	conferences_tuple = tuple(conferences_list)
+	for _ in xrange(count(sql_structures['conferences'].items()) - 1):
+		conferneces_query = "(%s, %s, %s, %s)"
+	conferences_query += "(%s, %s, %s, %s);"
+
+	# papers id to (release id, title, abstract)
+	papers_list = []
+	for (pid, attrs) in sql_structures['papers'].itmes():
+		papers_list.add(pid)
+		papers_list.add(attrs[0])
+		papers_list.add(attrs[1])
+		if attrs[2]:
+			papers_list.add(attrs[2])
+		else:
+			papers_list.add("NULL")
+	papers_tuple = tuple(papers_list)
+	for _ in xrange(count(sql_structures['papers'].items()) - 1):
+		papers_query += "(%s, %s, %s, %s),"
+	papers_query += "(%s, %s, %s, %s);"
+
+	# paper_topics (paper id, topic string)
+	for _ in xrange(count(sql_structures['paper_topics']) - 1):
+		paper_topics_query += "(%s, %s),"
+	paper_topics_query += "(%s, %s);"
+	paper_topics_list = []
+	for attrs in sql_structures['paper_topics']:
+		paper_topics_list.add(attrs[0])
+		paper_topics_list.add(attrs[1])
+	paper_topics_tuple = tuple(paper_topics_list)
+
+	# paper_authors (paper id, author string)
+	for _ in xrange(count(sql_structures['paper_authors']) - 1):
+		paper_authors_query += "(%s, %s),"
+	paper_authors_query += "(%s, %s);"
+	paper_authors_list = []
+	for attrs in sql_structures['paper_authors']:
+		paper_authors_list.add(attrs[0])
+		paper_authors_list.add(attrs[1])
+	paper_authors_tuple = tuple(paper_authors_list)
+
+	# paper_citations (paper id, citations string)
+	for _ in xrange(count(sql_structures['paper_citations']) - 1):
+		paper_citations_query += "(%s, %s),"
+	paper_citations_query += "(%s, %s);"
+	paper_citations_list = []
+	for attrs in sql_structures['paper_citations']:
+		paper_citations_list.add(attrs[0])
+		paper_citations_list.add(attrs[1])
+	paper_citations_tuple = tuple(paper_citations_list)
+
+	# keyphrases
+	for _ in xrange(count(sql_structures['keyphrases']) - 1):
+		keyphrases_query += "(%s),"
+	keyphrases_query += "(%s);"
+	keyphrases_tuple = tuple(sql_structures['keyphrases'])
+
+	# paper_keyphrases (paper id, citations string)
+	for _ in xrange(count(sql_structures['paper_keyphrases']) - 1):
+		paper_keyphrases_query += "(%s, %s),"
+	paper_keyphrases_query += "(%s, %s);"
+	paper_keyphrases_list = []
+	for attrs in sql_structures['paper_keyphrases']:
+		paper_keyphrases_list.add(attrs[0])
+		paper_keyphrases_list.add(attrs[1])
+	paper_keyphrases_tuple = tuple(paper_keyphrases_list)

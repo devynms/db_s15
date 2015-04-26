@@ -29,9 +29,10 @@ CREATE TABLE publishers (
 );
 
 CREATE TABLE releases (
-	id		INTEGER NOT NULL AUTO_INCREMENT,
-    pubdate	DATE NOT NULL,
-    publisher_name	VARCHAR (255) NOT NULL,
+	id              INTEGER NOT NULL AUTO_INCREMENT,
+    published_date  DATE NOT NULL,
+    published_time  TIME NULL,
+    publisher_name  VARCHAR (255) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (publisher_name)
         REFERENCES publishers(name)
@@ -80,19 +81,12 @@ CREATE TABLE conferences (
 
 CREATE TABLE papers (
 	id				INTEGER NOT NULL AUTO_INCREMENT,
-    release_id		INTEGER NULL,
+    release_id		INTEGER NOT NULL,
     title			VARCHAR(255) NOT NULL,
-    published_date	DATE NOT NULL,
-    publisher_name	VARCHAR (255) NOT NULL,
-    published_time	TIME,
     abstract		TEXT,
     PRIMARY KEY (id),
     INDEX (title),
     UNIQUE(title),
-    FOREIGN KEY (publisher_name)
-        REFERENCES publishers(name)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE,
 	FOREIGN KEY (release_id)
 		REFERENCES releases(id)
         ON DELETE RESTRICT
@@ -128,15 +122,10 @@ CREATE TABLE paper_authors (
 );
 
 CREATE TABLE paper_citations (
-	citing_paper_id	INTEGER NOT NULL,
-    cited_paper_id	INTEGER NOT NULL,
-    citation_text	TEXT NOT NULL,
+	citing_paper_id    INTEGER NOT NULL,
+    cited_paper_title  VARCHAR (255) NOT NULL,
     PRIMARY KEY (citing_paper_id, cited_paper_id),
     FOREIGN KEY (citing_paper_id)
-        REFERENCES papers(id)
-        ON DELETE RESTRICT
-        ON UPDATE RESTRICT,
-	FOREIGN KEY (cited_paper_id)
         REFERENCES papers(id)
         ON DELETE RESTRICT
         ON UPDATE RESTRICT

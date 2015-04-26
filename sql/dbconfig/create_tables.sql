@@ -69,6 +69,7 @@ CREATE TABLE journals (
 
 CREATE TABLE conferences (
 	release_id	INTEGER NOT NULL,
+    name        VARCHAR(255) NOT NULL,
     location	TEXT NOT NULL,
     keynote_speaker	VARCHAR(255) NULL,
     PRIMARY KEY (release_id),
@@ -79,7 +80,9 @@ CREATE TABLE conferences (
 	FOREIGN KEY (keynote_speaker)
         REFERENCES authors(name)
         ON DELETE SET NULL
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+    INDEX (name),
+    UNIQUE (name)
 );
 
 CREATE TABLE papers (

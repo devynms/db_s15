@@ -14,8 +14,12 @@ class Publisher:
 # pubdate: a string in the date format that SQL will expect on insert
 # pubtime: a string in the time format that SQL will expect on insert
 # topics: an array of primary topics
-class Release:
+class Release(object):
+	next_id = 0
+
 	def __init__(self, publisher, pubdate, pubtime = None, topics = []):
+		self.id = Release.next_id
+		Release.next_id += 1
 		self.publisher = publisher
 		self.pubdate = pubdate
 		self.pubtime = pubtime
@@ -26,8 +30,9 @@ class Release:
 # volume: an integer for volume
 # issue: an integer for issue
 class Journal(Release):
-	def __init__(self, volume, issue, publisher, pubdate, pubtime = None, topics = []):
+	def __init__(self, name, volume, issue, publisher, pubdate, pubtime = None, topics = []):
 		super(Journal, self).__init__(publisher, pubdate, pubtime, topics, subtopics)
+		self.name = name
 		self.volume = volume
 		self.issue = issue
 
@@ -35,14 +40,15 @@ class Journal(Release):
 # location: a string representing the location of the conference
 # speaker: an optional string of 255 chars or less representing the speaker's name
 class Conference(Release):
-	def __init__(self, location, publisher, pubdate, speaker = None, pubtime = None, topics = []):
+	def __init__(self, name, location, publisher, pubdate, speaker = None, pubtime = None, topics = []):
 		super(Conference, self).__init__(publisher, pubdate, pubtime, topics, subtopics)
+		self.name = name
 		self.location = location
 		self.speaker = speaker
 
 class AcademicPaper:
 
-	next_id = 0
+	AcademicPaper.next_id = 0
 
 	# title: a string < 255 chars
 	# kephrases: a map from keyphrase (string) to a count of the number of times it appears
@@ -52,8 +58,8 @@ class AcademicPaper:
 	# citations: a list of paper titles
 	# abstract: an optional string for the abstract text
 	def __init__(self, title, release, keyphrases, topics = [], authors = [], citations = [], abstract = None):
-		self.id = next_id
-		next_id += 1
+		self.id = AcademicPaper.next_id
+		AcademicPaper.next_id += 1
 		self.title = title
 		self.keyphrases = keyphrases
 		self.release = release
@@ -69,39 +75,21 @@ class AcademicPaper:
 # subtopics: a map from topic -> subtopic (both are strings < 255 chars)
 def sql_structures_from_papers (academic_papers, subtopics):
 	struct = {}
-	struct['authors'] = Set()		# set of author names
-	struct['publishers'] = Set()	# set of publisher names
-	struct['papers'] = {}			# id to {title, date, time, publisher, abstract}
-	struct['keyphrases'] = Set()	# set of keyphrases found
-	struct['paper_authors'] = Set()	# set of (paper_id, author_name)
-	struct['paper_keyphrases'] = {}	# (paper_id, phrase) to count
-
-	for paper in academic_papers:
-		# populate papers
-		if paper.id in struct['papers']: return None
-		struct['papers'] = {
-			'title': paper.title,
-			'published_date': paper.published_date,
-			'published_time': paper.published_time,
-			'publisher_name': paper.publisher,
-			'abstract'		: paper.abstract
-		}
-
-		# populate publishers
-		struct['publishers'] = paper.publisher
-
-		# populate authors, and paper_authors
-		for author in paper.authors:
-			struct['authors'].add(author)
-			struct['paper_authors'].add((paper.id, author))
-
-		# populate keyphrases, and paper_keyphrases
-		for (phrase, count) in paper.keyphrases.iteritems():
-			struct['keyphrases'].add(phrase)
-			if (paper.id, phrase) in struct['paper_keyphrases']: return None
-			struct['paper_keyphrases'][(paper.id, phrase)] = count
-
-	return struct
+	struct['topics'] = Set()		# a set of topic strings
+	struct['topic_subtopics'] = {}	# map from subtopic to topic
+	struct['authors'] = Set()		# a set of author names
+	struct['publishers'] = {}		# a map name to optional address
+	struct['releases'] = {}			# a map id to (pubdate, pubtime?, pubname)
+	struct['release_topics'] = {}	# a map from release id to topic string
+	struct['journals'] = {}			# a map from release id to (name, volume, issue)
+									# should check release id exists, name unique among journals
+	struct['conferences'] = {}		# a map from release id to (name, location, speaker)
+									# should check release id exists, name unique among conferences
+	struct['papers'] = {}			# a map from id to (release id, title, abstract)
+									# should check that release id exists
+	struct['paper_topics'] = {}		# a map from paper id to topic string <255
+									# should check that paper id exists
+	
 
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con

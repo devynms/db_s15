@@ -14,8 +14,12 @@ class Publisher:
 # pubdate: a string in the date format that SQL will expect on insert
 # pubtime: a string in the time format that SQL will expect on insert
 # topics: an array of primary topics
-class Release:
+class Release(object):
+	next_id = 0
+
 	def __init__(self, publisher, pubdate, pubtime = None, topics = []):
+		self.id = Release.next_id
+		Release.next_id += 1
 		self.publisher = publisher
 		self.pubdate = pubdate
 		self.pubtime = pubtime
@@ -42,7 +46,7 @@ class Conference(Release):
 
 class AcademicPaper:
 
-	next_id = 0
+	AcademicPaper.next_id = 0
 
 	# title: a string < 255 chars
 	# kephrases: a map from keyphrase (string) to a count of the number of times it appears
@@ -52,8 +56,8 @@ class AcademicPaper:
 	# citations: a list of paper titles
 	# abstract: an optional string for the abstract text
 	def __init__(self, title, release, keyphrases, topics = [], authors = [], citations = [], abstract = None):
-		self.id = next_id
-		next_id += 1
+		self.id = AcademicPaper.next_id
+		AcademicPaper.next_id += 1
 		self.title = title
 		self.keyphrases = keyphrases
 		self.release = release
@@ -69,39 +73,10 @@ class AcademicPaper:
 # subtopics: a map from topic -> subtopic (both are strings < 255 chars)
 def sql_structures_from_papers (academic_papers, subtopics):
 	struct = {}
-	struct['authors'] = Set()		# set of author names
-	struct['publishers'] = Set()	# set of publisher names
-	struct['papers'] = {}			# id to {title, date, time, publisher, abstract}
-	struct['keyphrases'] = Set()	# set of keyphrases found
-	struct['paper_authors'] = Set()	# set of (paper_id, author_name)
-	struct['paper_keyphrases'] = {}	# (paper_id, phrase) to count
-
-	for paper in academic_papers:
-		# populate papers
-		if paper.id in struct['papers']: return None
-		struct['papers'] = {
-			'title': paper.title,
-			'published_date': paper.published_date,
-			'published_time': paper.published_time,
-			'publisher_name': paper.publisher,
-			'abstract'		: paper.abstract
-		}
-
-		# populate publishers
-		struct['publishers'] = paper.publisher
-
-		# populate authors, and paper_authors
-		for author in paper.authors:
-			struct['authors'].add(author)
-			struct['paper_authors'].add((paper.id, author))
-
-		# populate keyphrases, and paper_keyphrases
-		for (phrase, count) in paper.keyphrases.iteritems():
-			struct['keyphrases'].add(phrase)
-			if (paper.id, phrase) in struct['paper_keyphrases']: return None
-			struct['paper_keyphrases'][(paper.id, phrase)] = count
-
-	return struct
+	struct['topics'] = Set()		# a set of topic strings
+	struct['topic_subtopics'] = {}	# map from subtopic to topic
+	struct['authors'] = Set()		# a set of author names
+	struct['publishers'] = {}		# a map
 
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con

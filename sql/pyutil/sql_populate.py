@@ -30,8 +30,9 @@ class Release(object):
 # volume: an integer for volume
 # issue: an integer for issue
 class Journal(Release):
-	def __init__(self, volume, issue, publisher, pubdate, pubtime = None, topics = []):
+	def __init__(self, name, volume, issue, publisher, pubdate, pubtime = None, topics = []):
 		super(Journal, self).__init__(publisher, pubdate, pubtime, topics, subtopics)
+		self.name = name
 		self.volume = volume
 		self.issue = issue
 
@@ -39,8 +40,9 @@ class Journal(Release):
 # location: a string representing the location of the conference
 # speaker: an optional string of 255 chars or less representing the speaker's name
 class Conference(Release):
-	def __init__(self, location, publisher, pubdate, speaker = None, pubtime = None, topics = []):
+	def __init__(self, name, location, publisher, pubdate, speaker = None, pubtime = None, topics = []):
 		super(Conference, self).__init__(publisher, pubdate, pubtime, topics, subtopics)
+		self.name = name
 		self.location = location
 		self.speaker = speaker
 
@@ -76,7 +78,18 @@ def sql_structures_from_papers (academic_papers, subtopics):
 	struct['topics'] = Set()		# a set of topic strings
 	struct['topic_subtopics'] = {}	# map from subtopic to topic
 	struct['authors'] = Set()		# a set of author names
-	struct['publishers'] = {}		# a map
+	struct['publishers'] = {}		# a map name to optional address
+	struct['releases'] = {}			# a map id to (pubdate, pubtime?, pubname)
+	struct['release_topics'] = {}	# a map from release id to topic string
+	struct['journals'] = {}			# a map from release id to (name, volume, issue)
+									# should check release id exists, name unique among journals
+	struct['conferences'] = {}		# a map from release id to (name, location, speaker)
+									# should check release id exists, name unique among conferences
+	struct['papers'] = {}			# a map from id to (release id, title, abstract)
+									# should check that release id exists
+	struct['paper_topics'] = {}		# a map from paper id to topic string <255
+									# should check that paper id exists
+	
 
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con

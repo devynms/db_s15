@@ -1,0 +1,952 @@
+2002-11-24 Sunday 18:29  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobe2h.c, density.c, fntenc.c, linebuf.c: Fix a few compiler
+	warnings.
+
+2002-11-17 Sunday 18:38  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* INSTALL, NEWS, README, configure.in: Prepare for 0.14.
+
+2002-11-17 Sunday 18:37  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* AUTHORS, TODO: Update.
+
+2002-11-17 Sunday 18:36  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* glyphops.c: Hints for the wide hat and wide tilde accents in AMS
+	fonts.
+
+2002-11-17 Sunday 18:35  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: Add bubble_node() as a wrapper around bubble() and use it
+	everywhere but in insert_list(). This reduces direct manipulation
+	of the global list_latest variable as far as possible.
+
+2002-11-12 Tuesday 00:29  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* pse2unic.c: Fix char signedness in report_line()s prototype,
+	silences harmless compiler warning.
+
+2002-11-12 Tuesday 00:28  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c:	- font_def(): be a bit less picky about which fonts
+	define axis_height,
+	    some of the AMS fonts are not really "TeX math symbols" encoded
+	but do.
+	  - font_def(): substitute missing fonts by cmr10.
+	  - read_tfm(): abort if opening the tfm file fails (missing fonts
+	can't be
+	    the cause anymore).
+
+2002-11-12 Tuesday 00:26  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: page_set_glyph(): call glyph_get_hint() only once and
+	save the result.
+
+2002-11-12 Tuesday 00:24  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: New translations for US-ASCII and friends: GLYPH_tilde
+	and GLYPH_similar to GLYPH_asciitilde, GLYPH_lessequal and
+	GLYPH_greaterequal to the usual ASCII art, the mathematical
+	alphabets (script, fraktur, blackboard bold) to the normal
+	alphabet.
+
+2002-11-12 Tuesday 00:23  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* build.sh: Prepare for 0.14.
+
+2002-11-08 Friday 00:36  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c: Make TEX MATH ITALIC SUBSET an alias for TEX MATH
+	ITALIC.
+
+2002-11-08 Friday 00:32  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.1: Update.
+
+2002-11-08 Friday 00:29  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c, pse2unic.c, enc/euex.enc: Add Euler compatible
+	extension font encoding.
+
+2002-11-07 Thursday 00:19  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: Optimize the default path in outenc_get_width(),
+	outenc_write().
+
+2002-11-06 Wednesday 23:39  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* glyphops.c, outenc.c: Use new spars32_t instead of sparp_t
+	holding pointers to ints.
+
+2002-11-06 Wednesday 01:25  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c: Add TEX MATH SYMBOLS SUBSET as an alias for TEX MATH
+	SYMBOLS.
+
+2002-11-06 Wednesday 01:24  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* sparse.c: Forgot a null pointer check.
+
+2002-11-05 Tuesday 23:18  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* sparse.c, sparse.h: Added "array of sint32" class (spars32_t).
+	Cleaned up a lot. May be a bit faster now.
+
+2002-10-31 Thursday 00:49  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, outenc.c, enc/texmext.enc, enc/texmsym.enc: Update to
+	latest Unicode version	 - use mathematical angle brackets instead
+	of angle brackets where     appropriate (Unicode 3.2)	- use math
+	script alphabet (Unicode 3.1)	- use new bracket pieces (Unicode
+	3.2) instead of Adobe's private space	  version
+
+2002-10-23 Wednesday 23:17  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: Add some translations for non-Unicode chars in
+	AMSSymbolsB encoding.
+
+2002-10-15 Tuesday 22:45  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, enc/amssymba.enc: Regularize some glyph names.
+
+2002-10-15 Tuesday 22:14  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Fix typo.
+
+2002-10-15 Tuesday 21:47  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c, pse2unic.c, enc/amssymbb.enc: Add AMSSymbolsB encoding.
+
+2002-10-15 Tuesday 21:46  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Add new glyphs required for AMSSymbolsB encoding.
+
+2002-10-01 Tuesday 23:21  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* util.c, util.h: Simplify xmalloc().
+
+2002-09-12 Thursday 22:29  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c, pse2unic.c, enc/amssymba.enc: Add AMS Symbols A (msam)
+	encoding.
+
+2002-09-12 Thursday 22:27  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Add new glyphs for msam. Remove superfluous spaces in
+	circle[A-Z] glyph definitions.
+
+2002-07-30 Tuesday 21:56  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/eufrak.enc, fntenc.c, pse2unic.c: Add eufrak (Euler Fraktur)
+	font encoding.
+
+2002-07-21 Sunday 23:00  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, pse2unic.c, enc/blackboard.enc, enc/blackboard.h:
+	Add a proper .enc file for the blackboard encoding (now that the
+	necessary Unicode chars are there). Thus, enc/blackboard.h is a
+	generated file now.
+
+2002-07-21 Sunday 22:56  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Add some of the new math characters in Unicode 3.2,
+	mostly from the mathematic alphanumerical symbols block.
+
+2002-07-09 Tuesday 22:51  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c: Optimize font_w_to_space(), which is called _very_
+	often:	 - Precompute constant (per font) values int font_def() and
+	store them     in struct tfm_t.    - The remaining calculations can
+	be switched from double arithmetic to	   integer arithmetic
+	without loss of precision.
+
+2002-07-09 Tuesday 22:50  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fixword.c:   - fw2double(): cast 1 to uint32 before shifting.
+	  - fw_prod(): add missing minus signs in return values.
+	  - fw_prod(): use shifts instead of multiplication/division by
+	powers of 2.
+
+2002-07-09 Tuesday 22:48  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* layout.c: Allow page_words to have no ceiling. Fixes superfluous
+	empty line at the beginning of every page.
+
+2002-07-05 Friday 21:39  uid44598
+
+	* regsta.c: Optimize dump_regs() for default (no debug output)
+	case.
+
+2002-07-05 Friday 21:34  uid44598
+
+	* bytesex.c: Optimize {u,s}_readbigendiannumber() a bit.
+
+2002-07-01 Monday 23:31  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page2.h: Fix typo in comment.
+
+2002-07-01 Monday 23:30  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: updates
+
+2002-07-01 Monday 23:29  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* layout.c: Heavily reworked and improved 2-dimensional layout
+	code.
+
+2002-07-01 Monday 23:28  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* util.h: Get size_t from <stddef.h> instead of <stdlib.h>.
+
+2002-06-09 Sunday 13:42  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, layout.c, layout.h, page.c, page2.h: Split out the
+	page_print_* functions into separate source file layout.c.  Export
+	a few page.c internals in page2.h to make this possible.
+
+2002-06-09 Sunday 13:40  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* util.h: Include <stdlib.h> because we use size_t.
+
+2002-06-09 Sunday 13:39  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, canvas.c: Add box drawing glyphs to adobetbl.h and
+	use their descriptive names in canvas.c
+
+2002-04-23 Tuesday 00:28  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: The beginnings of a really two-dimensional layout
+	algorithm; currently almost equivalent to, but already a bit better
+	than what we had before.  Simplify decide_space_count, we don't
+	need the complicated cases anymore.
+
+2002-04-23 Tuesday 00:27  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* density.c, density.h: Fix bug in scdf_set_curr_to_x when x ==
+	xmax. Add new function sdcf_floor_of_integral(). Update some
+	comments.
+
+2002-04-23 Tuesday 00:26  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile: Integrate canvas.{c,h}.
+
+2002-04-23 Tuesday 00:25  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* canvas.c, canvas.h: Models a two-dimensional array of display
+	cells in which one can draw text and rules.
+
+2002-04-09 Tuesday 22:20  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c: Use xmalloc instead of malloc/enomem -- zero sized
+	allocations are possible here.
+
+2002-04-09 Tuesday 22:19  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.c: Add facility to simulate different malloc behaviour on
+	GNU libc.
+
+2002-04-09 Tuesday 22:19  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* util.c, util.h:   - Add xmalloc() macro (handles zero sized
+	allocations right).
+	  - Don't duplicate enomem() and NOTREACHED message strings in
+	every
+	    object file which uses these macros.
+	  - Switch debug output functions from "char * format" to "const
+	char * format"
+	  - Add facility to simulate different malloc behaviour on GNU
+	libc.
+
+2002-04-01 Monday 22:57  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* README, configure.in: Update for 0.13 final.
+
+2002-03-30 Saturday 01:36  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: Use SINT32_MIN, SINT32_MAX macros instead of (broken)
+	explicit constants which made problems on alpha.
+
+2002-03-30 Saturday 01:35  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* bytesex.h: Fix SINT32_MIN macro.
+
+2002-03-28 Thursday 23:16  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* density.c, tfminfo.c, vlist.c: Get malloc() declaration from
+	<stdlib.h> (ISO C) instead of obsolete <malloc.h>.
+
+2002-03-24 Sunday 22:37  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* configure.in: Bump version to 0.13.pre2.
+
+2002-03-24 Sunday 22:37  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, glyphops.c, outenc.c: Add some glyphs. Make polish \L
+	and \l work. Translate /Eng to "Ng" and /eng to "ng" for ascii and
+	friends.
+
+2002-03-24 Sunday 22:35  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c, pse2unic.c, enc/dummy.enc, enc/ot1wofl.enc: Encoding
+	selection fixes:   - Forgot to uppercase `LATEX SYMBOLS' entry in
+	fontenctbl[].	 - Add dummy encoding for some AMS fonts which lie
+	about their encoding.	 - Move `TeX Text without f-ligatures' to a
+	seperate .enc file since it is	    not completely a subset of `Tex
+	Text'.
+
+2002-03-24 Sunday 22:32  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/textt.enc: Fix code point 0x20 (/$space -> /$visualspace).
+
+2002-03-24 Sunday 22:31  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/ot1.enc: Code points 0x22 (/quotedblright) and 0x5c
+	(/quotedblleft) were interchanged.  Fix code point 0x20 (/$space ->
+	/$polishstroke).
+
+2002-03-24 Sunday 22:30  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/cork.enc: Fix code points 0x17 (/$space -> /$ZWNJ), 0x20
+	(/$spacesymbol -> /$visualspace), 0x8d (/$Ng -> /Eng), 0xad (/$ng
+	-> /eng).
+
+2002-03-13 Wednesday 22:59  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* configure.in: Bump version to 0.13.pre1.
+
+2002-03-13 Wednesday 22:59  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* INSTALL, NEWS, README, build.sh, catdvi.c: Prepare for 0.13.
+
+2002-03-13 Wednesday 22:58  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* AUTHORS: Update.
+
+2002-03-13 Wednesday 22:57  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/texmsym.enc: Correct wrong mapping of code points 0x7d, 0x7e.
+
+2002-03-13 Wednesday 22:56  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, catdvi.1, fntenc.c, pse2unic.c, enc/latexsym.enc:
+	Added latexsym encoding.
+
+2002-03-13 Wednesday 22:54  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c: Don't compare .tfm checksums if either is zero.
+
+2002-03-09 Saturday 00:34  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/textcomp.enc: fix unavailable glyphs
+
+2002-03-09 Saturday 00:34  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.1: manpage update
+
+2002-03-09 Saturday 00:33  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.c: change -e option to accept encoding as name too
+
+2002-03-09 Saturday 00:32  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fntenc.c, util.c, util.h: move some small string utilities from
+	fntenc.c to util.c
+
+2002-03-09 Saturday 00:31  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c, outenc.h: add ISO-8859-15 output encoding; some related
+	cleanups
+
+2002-02-13 Wednesday 00:01  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.h: Add multiple inclusion guard.
+
+2002-02-13 Wednesday 00:01  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: Fix behaviour of generic_register_accentings() and
+	generic_accent() when more than one accenting table is registered.
+
+2002-02-13 Wednesday 00:00  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, vlist.c, vlist.h: Add generic list class.
+
+2002-02-07 Thursday 22:51  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: Updates
+
+2002-02-07 Thursday 22:51  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobe2h.c, adobetbl.h: Add many new Unicode chars, including
+	.notavail (REPLACEMENT CHARACTER) which needs special treatment in
+	adobe2h.c .
+
+2002-02-07 Thursday 22:49  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* pse2unic.c: Check that adobetbl.h is sorted (bsearch won't work
+	otherwise). Add marvosym encodings.
+
+2002-02-07 Thursday 22:46  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/marvo00.enc, enc/marvo98.enc, fntenc.c: Add (old and new)
+	marvosym encodings.
+
+2002-02-07 Thursday 22:44  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile: Stop enumerating all headers in enc/ manually.
+
+2002-01-17 Thursday 23:11  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, adobetbl.h, fntenc.c, fntenc.h, fontinfo.c,
+	fontinfo.h, glyphops.c, outenc.c, pse2unic.c, readdvi.c, tfminfo.c,
+	enc/eurosym.enc, enc/textcomp.enc: Add new font encodings: eurosym,
+	text companion; and related changes elsewhere:	 - adobetbl.h,
+	glyphops.c: Add new glyphs and glyph hints.    - outenc.c: Add new
+	accentings + translations. Also fix a printf() format.	  -
+	fntenc.c fntenc.h: pattern matching for font family in
+	find_fntenc()	   (need this for fonts with "U" encoding like
+	eurosym and probably others	 in future). Changes prototype of
+	find_fntenc().	  - fontinfo.c fontinfo.h: New function
+	font_family(). Adapt calls to	   find_fntenc().    - readdvi.c:
+	Adapt calls to find_fntenc().	 - tfminfo.c: Show font family. And
+	remove max, min macro definitions.    - pse2unic.c: Allow a command
+	in the preamble of the report (e.g. \usepackage)
+
+2002-01-17 Thursday 23:06  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c, util.h: Define max, min in util.h; remove other
+	definitions.
+
+2001-12-30 Sunday 00:26  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* readdvi.c: Don't ignore rules completely -- we can't output them
+	yet, but a set_rule needs to move the reference point even though.
+
+2001-12-10 Monday 22:26  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* configure.in: Check for getopt_long() in libkpathsea only if not
+	found in libc.	Bump version to final.
+
+2001-12-09 Sunday 22:17  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* bytesex.c: Fixed unwanted sign extension in s_readbigendiannumber
+	when sizeof(unsigned long) > sizeof(int).  size
+
+2001-12-08 Saturday 23:13  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, NEWS, README, build.sh, catdvi.c, config.mk.in,
+	configure.in: Fixed clashing getopt symbols on systems with
+	static-only libkpathsea.  Added --with-kpathsea-prefix option to
+	configure.
+
+2001-11-28 Wednesday 06:01  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README: fix my name
+
+2001-11-28 Wednesday 00:02  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: updates
+
+2001-11-28 Wednesday 00:01  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c: font_w_to_space(): handle fonts with quad == 0
+
+2001-11-28 Wednesday 00:00  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* tfminfo.c: print font parameter names
+
+2001-11-28 Wednesday 00:00  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* readdvi.c: fix fnt_def debug output -- font name is "n", not
+	"comment"
+
+2001-11-27 Tuesday 23:59  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: Use BF_DIACRITIC instead of GH_DIACRITIC in
+	page_adjust_diacritics.  Avoid the page_adjust_* loops when there's
+	nothing to adjust.
+
+2001-11-27 Tuesday 23:58  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* manifest-filter.lst: include version.h (for builds without
+	./configure) and plain text copy of man page in distribution
+
+2001-11-27 Tuesday 23:57  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* NEWS, README, configure.in: prepare for 0.12
+
+2001-11-27 Tuesday 23:56  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* INSTALL: add ISO C compiler to requirements, fix typo
+
+2001-11-27 Tuesday 23:55  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.1: add note about output width, small fixes
+
+2001-11-27 Tuesday 23:54  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile: add catdvi.txt and catdvi.html targets, small
+	rearrangements
+
+2001-11-21 Wednesday 00:48  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.c: update maintainer address and copyrights
+
+2001-11-21 Wednesday 00:47  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.1: update manpage
+
+2001-11-21 Wednesday 00:46  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* build.sh: simple build script for systems without GNU make
+
+2001-11-21 Wednesday 00:24  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* INSTALL: elaborate
+
+2001-11-21 Wednesday 00:22  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobe2h.c, glyphops.c, page.c: portability fixes -- stay ANSI C
+	compliant
+
+2001-11-14 Wednesday 00:18  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobe2h.c, glyphops.c, glyphops.h, outenc.c, outenc.h, page.c,
+	pse2unic.c: small fixes; remove some compiler warnings
+
+2001-11-14 Wednesday 00:15  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: updates
+
+2001-11-11 Sunday 23:09  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* tfminfo.c: Forgot to include "findtfm.h".
+
+2001-11-11 Sunday 23:08  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, catdvi.1, catdvi.c, page.c, page.h, pageref.c,
+	pageref.h, readdvi.c: 
+	Added cmd line option to select page range. And fixed a runaway
+	comment in page_adjust_radicals().
+
+2001-11-11 Sunday 23:01  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* bytesex.h: define SINT32_MAX, SINT32_MIN, UINT32_MAX
+
+2001-10-23 Tuesday 22:52  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, tfminfo.c: tfminfo is a new program to dump some
+	information about a tfm file (not much there yet).
+
+2001-10-23 Tuesday 22:50  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* test/texmext.tex: test for correct positioning of the TeX math
+	extension glyphs
+
+2001-10-23 Tuesday 22:46  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO, adobetbl.h, fontinfo.c, fontinfo.h, glyphops.c, glyphops.h,
+	outenc.c, page.c, page.h, readdvi.c, enc/texmext.enc: Added support
+	for most of `TeX Math Extensions' encoding (all but the extensible
+	recipes). Fixed most of the missing glyphs there. Reposition big
+	operators and radicals so they appear at the right place in
+	printout. This required some changes to other parts of the program:
+	 + fontinfo.c page.c page.h readdvi.c: Record depth of glyph in
+	box_t.	 + fontinfo.c fontinfo.h : Make non-mandatory font
+	parameters accessible.	 + fontinfo.c fontinfo.h : Added
+	font_axis_height(), renamed scale() to	   font_scale_fw() and
+	exported both.	 + readdvi.c : Keep track of the math axis and pass
+	it on to     page_set_glyph().	 + page.c : struct box_t has a few
+	new members.
+
+2001-04-16 Monday 20:21  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h, glyphops.c, outenc.c, enc/cork.enc, enc/ot1.enc,
+	enc/texmital.enc, enc/texmsym.enc, enc/textt.enc: Mark all
+	duplicate glyph names in adobetbl.h and get rid of all references
+	to them (pse2unic resolves references to duplicates in an arbitrary
+	fashion).
+
+2001-04-14 Saturday 20:05  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: Some new ascii/latin1 translations; (C) and (R) signs
+	as accentings.
+
+2001-04-14 Saturday 20:02  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* glyphops.c: Some new combining diacritics: encircle, slash
+	through, arrow above.
+
+2001-04-14 Saturday 20:01  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/texmital.enc, adobetbl.h: Fixed most of the missing glyphs in
+	texmital.enc .
+
+2001-04-12 Thursday 01:48  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/texmsym.enc: Fixed all but one missing glyph.
+
+2001-04-12 Thursday 01:47  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Added a lot of TeX math symbols.
+
+2001-04-12 Thursday 01:46  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* outenc.c: Added ascii translation minus -> hyphen.
+
+2001-04-10 Tuesday 00:11  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: Removed done items.
+
+2001-04-10 Tuesday 00:10  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* catdvi.c, glyphops.c, glyphops.h, linebuf.c, linebuf.h, outenc.c,
+	outenc.h, page.c, util.c: outenc.c, outenc.h: complete
+	reorganisation. Works string-based now, not character based; can
+	tell how wide strings would be in output.  page.c: use new outenc
+	facilities to get ligatures correctly aligned.	other files: moved
+	some code to outenc.c.
+
+2001-04-10 Tuesday 00:03  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* util.h:  - enomem(): tell where we ran out of memory.
+	 - Added "lengthof" macro for arays.
+
+2001-04-10 Tuesday 00:00  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Added some glyphs (quotes, ligatures).
+
+2001-03-22 Thursday 02:11  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, pse2unic.c: Collect all available TeX font ->
+	Unicode mapping information in a (LaTeX) report. Makes it much
+	easier to check what's going on.
+
+2001-03-19 Monday 02:10  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/cork.enc: Fixed the missing glyphs.
+
+2001-03-19 Monday 02:09  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, adobe2h.c, glyphops.c: Automatically derive a header
+	with glyph constants from adobetbl.h and use that in glyphops.c
+	instead of home brew definitions.
+
+2001-03-19 Monday 02:05  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* adobetbl.h: Added some glyphs: diacritics, private replacements
+	for ambiguous tcommaaccent, Tcommaaccent.
+
+2001-02-28 Wednesday 02:07  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* fontinfo.c: font_w_to_space(): if the tfm file has param[2]
+	(space) == 0, don't use param[6] (quad) as substitute, but only a
+	fraction of it. Improves math.
+
+2001-02-27 Tuesday 02:16  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* sparse.c: Portability fix: do not assume NULL is represented by a
+	zero bit pattern.
+
+2001-02-23 Friday 02:51  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* TODO: Document some ideas.
+
+2001-02-23 Friday 02:48  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, catdvi.c, glyphops.c, sparse.c, sparse.h: Use
+	"sparse arrays" (a lightweight container class based on trees)
+	instead of linear lists for glyph property lookups.
+
+2001-02-22 Thursday 17:12  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* outenc.c: Some new ASCII exceptions.
+
+2001-02-22 Thursday 07:06  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* test/math.tex: some more advanced maths
+
+2001-02-21 Wednesday 19:55  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, NEWS, README, configure.in, cvsparser.pl,
+	manifest-filter.lst, manifest-filter.pl: merge from 0.11 branch
+
+2001-02-21 Wednesday 19:32  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Fix the dist target.
+
+2001-02-21 Wednesday 19:15  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): If NOSIGN is empty, sign.  Not the other
+	way around.
+
+2001-02-21 Wednesday 19:14  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Propagate NOSIGN to the child make making
+	MD5SUMS.
+
+2001-02-21 Wednesday 19:12  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Make a useful NOSIGN option.
+
+2001-02-21 Wednesday 19:09  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Don't rebuild ChangeLog after making
+	MD5UMS.
+
+2001-02-21 Wednesday 19:06  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Actually do something useful in rewritten
+	dist target.
+
+2001-02-21 Wednesday 19:00  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Use Manifest from $(grbdir) when building
+	all in Manifest.
+
+2001-02-21 Wednesday 18:55  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Oops, forgot -v from grep.
+
+2001-02-21 Wednesday 18:53  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Make all files in Manifest, to be sure.
+
+2001-02-21 Wednesday 18:50  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* manifest-filter.lst (ver_0_11): Another fix
+
+2001-02-21 Wednesday 18:48  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile (ver_0_11): Fix.
+
+2001-02-21 Wednesday 18:47  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* manifest-filter.lst: file manifest-filter.lst was initially added
+	on branch ver_0_11.
+
+2001-02-21 Wednesday 18:47  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* cvsparser.pl: file cvsparser.pl was initially added on branch
+	ver_0_11.
+
+2001-02-21 Wednesday 18:47  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, cvsparser.pl, manifest-filter.lst,
+	manifest-filter.pl (ver_0_11): an untested new release-building
+	system
+
+2001-02-21 Wednesday 18:47  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* manifest-filter.pl: file manifest-filter.pl was initially added
+	on branch ver_0_11.
+
+2001-02-21 Wednesday 17:05  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* NEWS, README, configure.in (ver_0_11): preparation for 0.11
+	release
+
+2001-02-11 Sunday 23:04  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile: dist target: include ChangeLog in the distribution
+	tarball (seems to be the right thing, revert me if I'm wrong).
+
+2001-02-09 Friday 00:30  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* page.c: small fixes to page_print() : - change one debug message
+	level 10 -> 80 - forgot to free some memory
+
+2001-02-09 Friday 00:23  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, density.c, density.h, page.c: new alignment
+	algorithm (experimental, patch #103454)
+
+2001-02-09 Friday 00:19  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* GNUmakefile, fntenc.c, enc/textt.enc: added "TeX Typewriter Text"
+	input encoding (patch #103455)
+
+2001-02-09 Friday 00:15  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* enc/ot1.enc: correct /periodsuperoir -> /dotaccent in OT1
+	encoding (patch #103456)
+
+2001-02-07 Wednesday 17:02  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, changelog-authors, config.mk.in: add ChangeLog
+	autogeneration
+
+2001-02-07 Wednesday 16:50  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README: björn again
+
+2001-02-07 Wednesday 16:46  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* AUTHORS: updated Björn's data
+
+2001-02-07 Wednesday 00:07  Björn Brill <bjoernb@users.sourceforge.net>
+
+	* linebuf.c: Added missing brackets in linebuf_output_with_enc() -
+	operator precedence bug, but so far without consequences.
+
+2000-12-02 Saturday 11:45  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, catdvi.1, catdvi.c, glyphops.c, glyphops.h,
+	linebuf.c, linebuf.h, page.c, page.h, test/ot1umlauts.tex: OT1
+	diacritics support and sequential feature from Bjoern Brill
+
+2000-06-16 Friday 15:43  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* NEWS, configure.in, catdvi.1: Release 0.10.
+
+2000-06-16 Friday 15:43  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README: Release 0.10; note the mailing list
+
+2000-06-16 Friday 15:42  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* TODO: Update for --enable-developer-warnings
+
+2000-06-16 Friday 15:27  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, config.mk.in, configure.in, pse2unic.c, util.c,
+	util.h: Make pse2unic suppress warnings when warnings are not asked
+	for at configure time.
+
+2000-06-14 Wednesday 19:53  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* AUTHORS: Add Bjoern Brill the manpage author.
+
+2000-06-14 Wednesday 19:48  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile: Added an uninstall target.
+
+2000-06-14 Wednesday 19:46  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, config.mk.in: Install and distribute the manpage.
+
+2000-06-14 Wednesday 19:39  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* catdvi.1: Manpage from Bjoern Brill
+
+2000-04-16 Sunday 02:05  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile: Remove .tar.gz too at start of dist.
+
+2000-04-16 Sunday 01:59  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* NEWS, README, configure.in: Bumped version number to 0.9.
+
+2000-04-16 Sunday 01:47  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* config.mk.in: Added exec_prefix.
+
+2000-04-16 Sunday 01:36  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile: Typo.
+
+2000-04-16 Sunday 01:35  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile: Create also gzipped release files in dist target.
+
+2000-04-16 Sunday 01:27  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile: Include the file name in install's target argument
+
+2000-04-10 Monday 14:41  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, config.mk.in: wrote a skeleton install target that
+	probably does not work correctly
+
+2000-02-18 Friday 22:15  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* NEWS: 0.8 preparations
+
+2000-02-18 Friday 22:15  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, config.mk.in: Added dist target
+
+2000-02-18 Friday 18:08  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* enc/blackboard.h: oops, forgot this file
+
+2000-02-18 Friday 18:06  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, INSTALL, config.mk, config.mk.in, configure.in,
+	version.h, version.h.in: Use autoconf.
+
+2000-02-18 Friday 18:04  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README: Updated.
+
+2000-02-18 Friday 17:09  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* Makefile: Removing cruft
+
+2000-02-17 Thursday 22:46  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* .depend, LICENSE, catdvi.h: Removing more old cruft
+
+2000-02-17 Thursday 22:39  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README: Updated URLs, preparing for 0.7b
+
+2000-02-17 Thursday 22:15  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README, version.h: Importing v0.7a
+
+2000-02-17 Thursday 22:08  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* NEWS, README, fixword.c, fixword.h, fontinfo.c, page.c,
+	readdvi.c, readdvi.h, regsta.c, regsta.h, test/box.tex: Importing
+	v0.7
+
+2000-02-17 Thursday 21:59  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, INSTALL, NEWS, README, TODO, adobetbl.h, bytesex.c,
+	bytesex.h, catdvi.c, findtfm.h, fntenc.c, fontinfo.c, fontinfo.h,
+	getopt.c, getopt.h, getopt1.c, kpathsea.c, outenc.c, outenc.h,
+	readdvi.c, regsta.c, regsta.h, version.h, enc/cork.enc, config.mk,
+	fixword.c, fixword.h, page.c, page.h, test/finnish.tex,
+	test/ligatures.tex, test/math.tex, test/private.tex,
+	test/testfont.tex, test/texlogo.tex: Importing v0.6
+
+2000-02-17 Thursday 21:54  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* GNUmakefile, NEWS, README, catdvi.c, outenc.c, version.h:
+	Importing v0.5
+
+2000-02-17 Thursday 21:33  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* AUTHORS, README, TODO, catdvi.c, fntenc.c, fntenc.h, outenc.c,
+	outenc.h, regsta.c, regsta.h, util.c, util.h, GNUmakefile, INSTALL,
+	NEWS, adobetbl.h, bytesex.c, bytesex.h, findtfm.h, fontinfo.c,
+	fontinfo.h, getopt.c, getopt.h, getopt1.c, kpathsea.c, pse2unic.c,
+	readdvi.c, readdvi.h, version.h, enc/README, enc/cork.enc,
+	enc/ot1.enc, enc/texmext.enc, enc/texmital.enc, enc/texmsym.enc:
+	Importing v0.4
+
+2000-02-17 Thursday 21:29  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* AUTHORS, Makefile, README, catdvi.c, TODO, fntenc.c, fntenc.h,
+	outenc.c, outenc.h: Importing v0.3
+
+2000-02-17 Thursday 21:25  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README, catdvi.c: Importing v0.2
+
+2000-02-17 Thursday 21:21  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* README, catdvi.c, regsta.c, COPYING: Importing v0.1 (the previous
+	was v.0.0, oops)
+
+2000-02-17 Thursday 21:18  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* Makefile, catdvi.h, LICENSE, catdvi.c, .depend, AUTHORS, util.c,
+	util.h, README, regsta.h, regsta.c: Initial revision
+
+2000-02-17 Thursday 21:18  Antti-Juhani Kaijanaho <gaia@iki.fi>
+
+	* Makefile, catdvi.h, LICENSE, catdvi.c, .depend, AUTHORS, util.c,
+	util.h, README, regsta.h, regsta.c: Version 0.1 import
+

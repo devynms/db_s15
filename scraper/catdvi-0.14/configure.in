@@ -1,0 +1,70 @@
+dnl    catdvi - get text from DVI files
+dnl    Copyright (C) 2000, 2001 Antti-Juhani Kaijanaho <gaia@iki.fi>
+dnl    Copyright (C) 2001 Bjoern Brill <brill@fs.math.uni-frankfurt.de>
+dnl
+dnl    This program is free software; you can redistribute it and/or modify
+dnl    it under the terms of the GNU General Public License as published by
+dnl    the Free Software Foundation; either version 2 of the License, or
+dnl    (at your option) any later version.
+dnl
+dnl    This program is distributed in the hope that it will be useful,
+dnl    but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl    GNU General Public License for more details.
+dnl
+dnl    You should have received a copy of the GNU General Public License
+dnl    along with this program; if not, write to the Free Software
+dnl    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+AC_INIT(catdvi.c)
+
+PACKAGE=catdvi
+VERSION=0.14
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+
+AC_PROG_CC
+
+AC_CHECK_FUNC(getopt_long, CFG_HAS_GETOPT_LONG=yes, CFG_HAS_GETOPT_LONG=no)
+AC_SUBST(CFG_HAS_GETOPT_LONG)
+
+AC_ARG_WITH(kpathsea-prefix,
+[  --with-kpathsea-prefix=PREFIX
+                          kpathsea library installed in PREFIX (optional)],
+kpathsea_prefix="$withval", kpathsea_prefix="")
+
+if test x"$kpathsea_prefix" = "xyes"; then
+    AC_MSG_ERROR([*** --with-kpathsea-prefix requires an argument ***])
+fi
+if test x"$kpathsea_prefix" != "x"; then
+    LDFLAGS="$LDFLAGS -L$kpathsea_prefix/lib"
+    CPPFLAGS="$CPPFLAGS -I$kpathsea_prefix/include"
+fi
+
+
+AC_CHECK_LIB(kpathsea, kpse_set_program_name, CFG_HAS_KPATHSEA=yes, CFG_HAS_KPATHSEA=no)
+AC_SUBST(CFG_HAS_KPATHSEA)
+
+if test x"$CFG_HAS_KPATHSEA" = "xno"; then
+    AC_MSG_ERROR([*** kpathsea library (required) not found; try to use the --with-kpathsea-prefix option ***])
+fi
+
+dnl It seem libkpathsea provides a getopt_long() implementation
+dnl if and only if the C library does not.
+dnl
+dnl If the C library DOES have getopt_long, we can't check for another one
+dnl in libkpathsea without extra complications, because linking the
+dnl test program always succeeds. And we don't need it anyway.
+dnl
+if test x"$CFG_HAS_GETOPT_LONG" = "xno"; then
+    AC_CHECK_LIB(kpathsea, getopt_long, CFG_KPATHSEA_HAS_GETOPT_LONG=yes, CFG_KPATHSEA_HAS_GETOPT_LONG=no)
+else
+    CFG_KPATHSEA_HAS_GETOPT_LONG="no"
+fi
+AC_SUBST(CFG_KPATHSEA_HAS_GETOPT_LONG)
+
+AC_ARG_ENABLE(developer-warnings, [  --enable-developer-warnings],
+                                  CFG_SHOW_PSETOUNIC_WARNINGS=yes,
+                                  CFG_SHOW_PSETOUNIC_WARNINGS=no)
+AC_SUBST(CFG_SHOW_PSETOUNIC_WARNINGS)
+
+AC_OUTPUT(config.mk version.h)

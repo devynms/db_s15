@@ -1,0 +1,8 @@
+- \.cvsignore
++ Manifest
++ ChangeLog
++ MD5SUMS
++ configure
++ version.h
++ catdvi.txt
+! ^(.*)\.c$ $1.d

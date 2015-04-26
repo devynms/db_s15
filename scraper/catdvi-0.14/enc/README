@@ -1,0 +1,89 @@
+The *.enc files in this directory are in the DVIPS ENC format.
+
+Here's the description of that format, pasted from the dvips manual.
+Note that we ignore the ligature and kerning information.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+  Afm2tfm's encoding files have the same format as an encoding vector
+in a PostScript font.  Here is a skeletal example:
+
+     % Comments are ignored, unless the first word after the percent sign
+     % is `LIGKERN'; see below.
+     /MyEncoding [ % exactly 256 entries follow, each with a leading `/'
+       /Alpha /Beta /Gamma /Delta ...
+       /A /B ... /Z
+       ...  /.notdef /xfooaccent /yfooaccent /zfooaccent
+     ] def
+
+  These encoding files are downloaded as part of changing the encoding
+at the PostScript level (see the previous section).
+
+  Comments, which start with a percent sign and continue until the end
+of the line, are ignored unless they start with `LIGKERN' (see below).
+
+  The first non-comment word of the file must start with a forward slash
+`/' (i.e., a PostScript literal name) and defines the name of the
+encoding.  The next word must be an left bracket `['.  Following that
+must be precisely 256 character names; use `/.notdef' for any that you
+want to leave undefined.  Then there must be a matching right bracket
+`]'.  A final `def' token is optional.  All names are case-sensitive.
+
+  Any ligature or kern information is given as a comment.  If the first
+word after the `%' is `LIGKERN', then the entire rest of the line is
+parsed for ligature and kern information.  This ligature and kern
+information is given in groups of words: each group is terminated by a
+space and a semicolon and (unless the semicolon is at the end of a
+line) another space.
+
+  In these `LIGKERN' statements, three types of information may be
+specified.  These three types are ligature pairs, kerns to ignore, and
+the character value of this font's boundary character.
+
+  Throughout a `LIGKERN' statement, the boundary character is specified
+as `||'. To set the font's boundary character value for TeX:
+
+     % LIGKERN || = 39 ;
+
+  To indicate a kern to remove, give the names of the two characters
+(without the leading slash) separated by `{}', as in `one {} one ;'.
+This is intended to be reminiscent of the way you might use `{}' in a
+TeX file to turn off ligatures or kerns at a particular location.
+Either or both of the character names can be given as `*', which is a
+wild card matching any character; thus, all kerns can be removed with
+`* {} * ;'.
+
+  To specify a ligature, specify the names of the pair of characters,
+followed by the ligature operation (as in Metafont), followed by the
+replacing character name.  Either (but not both) of the first two
+characters can be `||' to indicate a word boundary.
+
+  The most common operation is `=:' meaning that both characters are
+removed and replaced by the third character, but by adding the `|'
+character on either side of the `=:', you can retain either or both of
+the two leading characters.  In addition, by suffixing the ligature
+operation with one or two `>' signs, you can make the ligature scanning
+operation skip that many resulting characters before proceeding.  This
+works just like in Metafont.  For example, the `fi' ligature is
+specified with `f i =: fi ;'.  A more convoluted ligature is `one one
+|=:|>> exclam ;' which separates a pair of adjacent `1''s with an
+exclamation point, and then skips over two of the resulting characters
+before continuing searching for ligatures and kerns.  You cannot give
+more >'s than |'s in an ligature operation, so there are a total of
+eight possibilities:
+
+     =: |=: |=:> =:| =:|> |=:| |=:|> |=:|>>
+
+  The default set of ligatures and kerns built in to Afm2tfm is:
+
+     % LIGKERN question quoteleft =: questiondown ;
+     % LIGKERN exclam quoteleft =: exclamdown ;
+     % LIGKERN hyphen hyphen =: endash ; endash hyphen =: emdash ;
+     % LIGKERN quoteleft quoteleft =: quotedblleft ;
+     % LIGKERN quoteright quoteright =: quotedblright ;
+     % LIGKERN space {} * ; * {} space ; 0 {} * ; * {} 0 ;
+     % LIGKERN 1 {} * ; * {} 1 ; 2 {} * ; * {} 2 ; 3 {} * ; * {} 3 ;
+     % LIGKERN 4 {} * ; * {} 4 ; 5 {} * ; * {} 5 ; 6 {} * ; * {} 6 ;
+     % LIGKERN 7 {} * ; * {} 7 ; 8 {} * ; * {} 8 ; 9 {} * ; * {} 9 ;
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

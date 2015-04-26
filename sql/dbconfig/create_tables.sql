@@ -55,9 +55,12 @@ CREATE TABLE release_topics (
 
 CREATE TABLE journals (
 	release_id	INTEGER NOT NULL,
+    name        VARCHAR(255) NOT NULL,
     volume		INTEGER NOT NULL,
     issue		INTEGER NOT NULL,
     PRIMARY KEY (release_id),
+    INDEX (name),
+    UNIQUE (name),
     FOREIGN KEY (release_id)
         REFERENCES releases(id)
         ON DELETE CASCADE

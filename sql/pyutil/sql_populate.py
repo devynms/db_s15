@@ -76,20 +76,82 @@ class AcademicPaper:
 def sql_structures_from_papers (academic_papers, subtopics):
 	struct = {}
 	struct['topics'] = Set()		# a set of topic strings
-	struct['topic_subtopics'] = {}	# map from subtopic to topic
+	struct['topic_subtopics'] = subtopics	# map from subtopic to topic
 	struct['authors'] = Set()		# a set of author names
 	struct['publishers'] = {}		# a map name to optional address
 	struct['releases'] = {}			# a map id to (pubdate, pubtime?, pubname)
-	struct['release_topics'] = {}	# a map from release id to topic string
+	struct['release_topics'] = set()# a set of (release id, topic string)
 	struct['journals'] = {}			# a map from release id to (name, volume, issue)
 									# should check release id exists, name unique among journals
 	struct['conferences'] = {}		# a map from release id to (name, location, speaker)
 									# should check release id exists, name unique among conferences
 	struct['papers'] = {}			# a map from id to (release id, title, abstract)
 									# should check that release id exists
-	struct['paper_topics'] = {}		# a map from paper id to topic string <255
-									# should check that paper id exists
-	
+	struct['paper_topics'] = set()	# a set of (paper id, topic string)
+									# should check that paper id and topic exist
+	struct['paper_authors'] = set()	# a set of (paper id, author name) (string<255)
+									# should check that paper id and author id exists
+	struct['paper_citations'] = set()	# a set of (paper id, paper title)
+	struct['keyphrases'] = set()	# a set of keyphrases (string<255)
+	struct['paper_keyphrases'] = set()	# a set of (paper id, keyphrase string<255)
+
+	for paper in academic_papers:
+		# populate topics, paper_topics
+		for paper_topic in paper.topics
+			struct['topics'].add(paper_topic)
+			struct['paper_topics'].add((paper.id, paper_topic))
+		# populate authors
+		for paper_author in paper.authors
+			struct['authors'].add(paper_author)
+		# populate publishers
+		pub = paper.release.publisher
+		if pub.name in struct['publishers']:
+			if struct['publishers'][pub.name] = None:
+				struct['publishers'][pub.name] = pub.address
+			elif struct['publishers'][pub.name] != pub.address:
+				raise
+			else:
+				struct['publishers'][pub.name] = pub.address
+		# populate releases
+		release = paper.release
+		if release.id in struct['releases']:
+			if (release.pubdate, release.pubtime, release.publisher) != struct['releases'][release.id]:
+				raise
+		struct['releases'] = (release.pubdate, release.pubtime, release.publisher)
+		#		journals
+		if type(release) is Journal:
+			if release.id in struct['journals'] and (release.name, release.volume, release.issue) != struct['journals'][release.id]:
+				raise
+			else:
+				struct['journals'][release.id] = (release.name, release.volume, release.issue)
+		#		conferences
+		elif type(release) is Conference:
+			if release.id in struct['conferences'] and (release.name, release.location, release.speaker) != struct['conferences'][release.id]:
+				raise
+			else:
+				struct['conferences'][release.id] = (release.name, release.location, release.speaker)
+		else:
+			raise
+		#		topics
+		for release_topc in release.topics:
+			struct['release_topcs'].add((release.id, release_topic))
+		# populate papers
+		struct['papers'][paper.id] = (paper.release.id, paper.title, paper.abstract)
+		#		topics
+		for paper_topic in paper.topics:
+			struct['paper_topics'].add((paper.id, paper_topc))
+		#		authors
+		for paper_author in paper.authors:
+			struct['paper_authors'].add((paper.id, paper_author))
+		#		citations
+		for paper_citation in paper.citations:
+			struct['paper_citations'].add((paper.id, paper_citation))
+
+		# keywords
+		for keyphrase in paper.keyphrases:
+			struct['keyphrases'].add(keyphrase)
+			struct['paper_keyphrases'].add((paper.id, keyphrase))
+
 
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con

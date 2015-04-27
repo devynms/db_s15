@@ -141,6 +141,7 @@ def sql_structures_from_papers (academic_papers, subtopics):
 			raise
 		#		topics
 		for release_topic in release.topics:
+			struct['topics'].add(release_topic)
 			struct['release_topics'].add((release.id, release_topic))
 		# populate papers
 		struct['papers'][paper.id] = (paper.release.id, paper.title, paper.abstract)

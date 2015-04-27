@@ -112,13 +112,13 @@ def sql_structures_from_papers (academic_papers, subtopics):
 			struct['authors'].add(paper_author)
 		# populate publishers
 		pub = paper.release.publisher
-		if pub.name not in struct['publishers']:
+		if pub.name in struct['publishers']:
 			if struct['publishers'][pub.name] == None:
 				struct['publishers'][pub.name] = pub.address
 			elif struct['publishers'][pub.name] != pub.address:
 				raise
-			else:
-				struct['publishers'][pub.name] = pub.address
+		else:
+			struct['publishers'][pub.name] = pub.address
 		# populate releases
 		release = paper.release
 		if release.id in struct['releases']:

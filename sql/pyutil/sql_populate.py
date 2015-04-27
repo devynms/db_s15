@@ -166,10 +166,10 @@ def sql_structures_from_papers (academic_papers, subtopics):
 # publish it to the database connected to by sql_con
 def publish_sql_structures (sql_con, sql_structures):
 	topics_query = "INSERT INTO topics VALUES "
-	topic_subtopics_query = "INSERT INcountcountcountTO topic_subtopics VALUES "
+	topic_subtopics_query = "INSERT INTO topic_subtopics VALUES "
 	authors_query = "INSERT INTO authors VALUES "
 	publishers_query = "INSERT INTO publishers VALUES "
-	releases_query = "INSERT INTO releases(published_date, published_time, publisher_name) VALUES "
+	releases_query = "INSERT INTO releases VALUES "
 	release_topics_query = "INSERT INTO release_topics VALUES "
 	journals_query = "INSERT INTO journals VALUES "
 	conferences_query = "INSERT INTO conferences VALUES "
@@ -213,6 +213,7 @@ def publish_sql_structures (sql_con, sql_structures):
 	# releases (id -> (pubdate, pubtime? pubname))
 	releases_list = []
 	for rid, attrs in sql_structures['releases'].items():
+		releases_list.append('DEFAULT')
 		releases_list.append(attrs[0])
 		if attrs[1]:
 			releases_list.append(attrs[1])
@@ -221,8 +222,8 @@ def publish_sql_structures (sql_con, sql_structures):
 		releases_list.append(attrs[2])
 	releases_tuple = tuple(releases_list)
 	for _ in range(len(sql_structures['releases'].items()) - 1):
-		releases_query += "(%s, %s, %s),"
-	releases_query += "(%s, %s, %s);"
+		releases_query += "(%s, %s, %s, %s),"
+	releases_query += "(%s, %s, %s, %s);"
 
 	# release_topics (release_id, topics_string)
 	for _ in range(len(sql_structures['release_topics']) - 1):
@@ -261,6 +262,7 @@ def publish_sql_structures (sql_con, sql_structures):
 	# papers id to (release id, title, abstract)
 	papers_list = []
 	for (pid, attrs) in sql_structures['papers'].items():
+		papers_list.append('DEFAULT')
 		papers_list.append(attrs[0])
 		papers_list.append(attrs[1])
 		if attrs[2]:
@@ -269,8 +271,8 @@ def publish_sql_structures (sql_con, sql_structures):
 			papers_list.append("NULL")
 	papers_tuple = tuple(papers_list)
 	for _ in range(len(sql_structures['papers'].items()) - 1):
-		papers_query += "(%s, %s, %s),"
-	papers_query += "(%s, %s, %s);"
+		papers_query += "(%s, %s, %s, %s),"
+	papers_query += "(%s, %s, %s, %s);"
 
 	# paper_topics (paper id, topic string)
 	for _ in range(len(sql_structures['paper_topics']) - 1):

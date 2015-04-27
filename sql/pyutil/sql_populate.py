@@ -169,11 +169,11 @@ def publish_sql_structures (sql_con, sql_structures):
 	topic_subtopics_query = "INSERT INcountcountcountTO topic_subtopics VALUES "
 	authors_query = "INSERT INTO authors VALUES "
 	publishers_query = "INSERT INTO publishers VALUES "
-	releases_query = "INSERT INTO releases VALUES "
+	releases_query = "INSERT INTO releases(published_date, published_time, publisher_name) VALUES "
 	release_topics_query = "INSERT INTO release_topics VALUES "
 	journals_query = "INSERT INTO journals VALUES "
 	conferences_query = "INSERT INTO conferences VALUES "
-	papers_query = "INSERT INTO papers VALUES "
+	papers_query = "INSERT INTO papers(release_id, title, abstract) VALUES "
 	paper_topics_query = "INSERT INTO paper_topics VALUES "
 	paper_authors_query = "INSERT INTO paper_authors VALUES "
 	paper_citations_query = "INSERT INTO paper_citations VALUES "
@@ -213,7 +213,6 @@ def publish_sql_structures (sql_con, sql_structures):
 	# releases (id -> (pubdate, pubtime? pubname))
 	releases_list = []
 	for rid, attrs in sql_structures['releases'].items():
-		releases_list.append(rid)
 		releases_list.append(attrs[0])
 		if attrs[1]:
 			releases_list.append(attrs[1])
@@ -222,8 +221,8 @@ def publish_sql_structures (sql_con, sql_structures):
 		releases_list.append(attrs[2])
 	releases_tuple = tuple(releases_list)
 	for _ in range(len(sql_structures['releases'].items()) - 1):
-		releases_query += "(%s, %s, %s, %s),"
-	releases_query += "(%s, %s, %s, %s);"
+		releases_query += "(%s, %s, %s),"
+	releases_query += "(%s, %s, %s);"
 
 	# release_topics (release_id, topics_string)
 	for _ in range(len(sql_structures['release_topics']) - 1):
@@ -238,10 +237,10 @@ def publish_sql_structures (sql_con, sql_structures):
 	# journals (id -> (name, volume, issue))
 	journals_list = []
 	for (rid, attrs) in sql_structures['journals'].items():
-		releases_list.append(rid)
-		releases_list.append(attrs[0])
-		releases_list.append(attrs[1])
-		releases_list.append(attrs[2])
+		journals_list.append(rid)
+		journals_list.append(attrs[0])
+		journals_list.append(attrs[1])
+		journals_list.append(attrs[2])
 	journals_tuple = tuple(journals_list)
 	for _ in range(len(sql_structures['journals'].items()) - 1):
 		journals_query += "(%s, %s, %s, %s),"
@@ -250,10 +249,10 @@ def publish_sql_structures (sql_con, sql_structures):
 	# conferences (id -> (name, loc, speaker))
 	conferences_list = []
 	for (rid, attrs) in sql_structures['conferences'].items():
-		releases_list.append(rid)
-		releases_list.append(attrs[0])
-		releases_list.append(attrs[1])
-		releases_list.append(attrs[2])
+		conferences_list.append(rid)
+		conferences_list.append(attrs[0])
+		conferences_list.append(attrs[1])
+		conferences_list.append(attrs[2])
 	conferences_tuple = tuple(conferences_list)
 	for _ in range(len(sql_structures['conferences'].items()) - 1):
 		conferneces_query = "(%s, %s, %s, %s)"
@@ -262,7 +261,6 @@ def publish_sql_structures (sql_con, sql_structures):
 	# papers id to (release id, title, abstract)
 	papers_list = []
 	for (pid, attrs) in sql_structures['papers'].items():
-		papers_list.append(pid)
 		papers_list.append(attrs[0])
 		papers_list.append(attrs[1])
 		if attrs[2]:
@@ -271,8 +269,8 @@ def publish_sql_structures (sql_con, sql_structures):
 			papers_list.append("NULL")
 	papers_tuple = tuple(papers_list)
 	for _ in range(len(sql_structures['papers'].items()) - 1):
-		papers_query += "(%s, %s, %s, %s),"
-	papers_query += "(%s, %s, %s, %s);"
+		papers_query += "(%s, %s, %s),"
+	papers_query += "(%s, %s, %s);"
 
 	# paper_topics (paper id, topic string)
 	for _ in range(len(sql_structures['paper_topics']) - 1):
@@ -322,21 +320,34 @@ def publish_sql_structures (sql_con, sql_structures):
 
 	# Perform Insertions
 	cursor = sql_con.cursor()
-	cursor.execute(topics_query, topics_tuple)
-	cursor.execute(authors_query, authors_tuple)
-	cursor.execute(publishers_query, publishers_tuple)
-	cursor.execute(releases_query, releases_tuple)
+	if topics_tuple != ():
+		cursor.execute(topics_query, topics_tuple)
+	if authors_tuple != ():
+		cursor.execute(authors_query, authors_tuple)
+	if publishers_tuple != ():
+		cursor.execute(publishers_query, publishers_tuple)
+	if releases_tuple != ():
+		cursor.execute(releases_query, releases_tuple)
 	print(release_topics_query)
 	print(release_topics_tuple)
 	print(releases_tuple)
-	cursor.execute(release_topics_query, release_topics_tuple)
-	cursor.execute(journals_query, journals_tuple)
-	cursor.execute(conferences_query, conferences_tuple)
-	cursor.execute(papers_query, papers_tuple)
-	cursor.execute(paper_topics_query, paper_topics_tuple)
-	cursor.execute(paper_authors_query, paper_authors_tuple)
-	cursor.execute(paper_citations_query, paper_citations_tuple)
-	cursor.execute(keyphrases_query, keyphrases_tuple)
-	cursor.execute(paper_keyphrases_query, paper_keyphrases_tuple)
+	if release_topics_tuple != ():
+		cursor.execute(release_topics_query, release_topics_tuple)
+	if journals_tuple != ():
+		cursor.execute(journals_query, journals_tuple)
+	if conferences_tuple != ():
+		cursor.execute(conferences_query, conferences_tuple)
+	if papers_tuple != ():
+		cursor.execute(papers_query, papers_tuple)
+	if paper_topics_tuple != ():
+		cursor.execute(paper_topics_query, paper_topics_tuple)
+	if paper_authors_tuple != ():
+		cursor.execute(paper_authors_query, paper_authors_tuple)
+	if paper_citations_tuple != ():
+		cursor.execute(paper_citations_query, paper_citations_tuple)
+	if keyphrases_tuple != ():
+		cursor.execute(keyphrases_query, keyphrases_tuple)
+	if paper_keyphrases_tuple != ():
+		cursor.execute(paper_keyphrases_query, paper_keyphrases_tuple)
 	sql_con.commit()
 	cursor.close()

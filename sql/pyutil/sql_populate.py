@@ -157,8 +157,8 @@ def sql_structures_from_papers (academic_papers, subtopics):
 
 		# keywords
 		for keyphrase in paper.keyphrases:
-			struct['keyphrases'].add(keyphrase)
-			struct['paper_keyphrases'].add((paper.id, keyphrase))
+			struct['keyphrases'].add(keyphrase[0])
+			struct['paper_keyphrases'].add((paper.id, keyphrase[0], keyphrase[1]))
 	return struct
 
 

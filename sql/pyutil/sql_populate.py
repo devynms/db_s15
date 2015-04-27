@@ -140,8 +140,8 @@ def sql_structures_from_papers (academic_papers, subtopics):
 		else:
 			raise
 		#		topics
-		for release_topc in release.topics:
-			struct['release_topcs'].add((release.id, release_topic))
+		for release_topic in release.topics:
+			struct['release_topics'].add((release.id, release_topic))
 		# populate papers
 		struct['papers'][paper.id] = (paper.release.id, paper.title, paper.abstract)
 		#		topics
@@ -183,7 +183,9 @@ def publish_sql_structures (sql_con, sql_structures):
 	for _ in range(len(sql_structures['topics']) - 1):
 		topics_query += "(%s),"
 	topics_query += "(%s);"
+	print(sql_structures['topics'])
 	topics_tuple = tuple(sql_structures['topics'])
+	print(topics_tuple)
 
 	# topics_subtopics
 	# TODO
@@ -228,8 +230,8 @@ def publish_sql_structures (sql_con, sql_structures):
 	release_topics_query += "(%s, %s);"
 	release_topics_list = []
 	for attrs in sql_structures['release_topics']:
-		release_topics_list.add(attrs[0])
-		release_topics_list.add(attrs[1])
+		release_topics_list.append(attrs[0])
+		release_topics_list.append(attrs[1])
 	release_topics_tuple = tuple(release_topics_list)
 
 	# journals (id -> (name, volume, issue))
@@ -323,6 +325,9 @@ def publish_sql_structures (sql_con, sql_structures):
 	cursor.execute(authors_query, authors_tuple)
 	cursor.execute(publishers_query, publishers_tuple)
 	cursor.execute(releases_query, releases_tuple)
+	print(release_topics_query)
+	print(release_topics_tuple)
+	print(releases_tuple)
 	cursor.execute(release_topics_query, release_topics_tuple)
 	cursor.execute(journals_query, journals_tuple)
 	cursor.execute(conferences_query, conferences_tuple)

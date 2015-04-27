@@ -173,7 +173,7 @@ def publish_sql_structures (sql_con, sql_structures):
 	release_topics_query = "INSERT INTO release_topics VALUES "
 	journals_query = "INSERT INTO journals VALUES "
 	conferences_query = "INSERT INTO conferences VALUES "
-	papers_query = "INSERT INTO papers(release_id, title, abstract) VALUES "
+	papers_query = "INSERT INTO papers VALUES "
 	paper_topics_query = "INSERT INTO paper_topics VALUES "
 	paper_authors_query = "INSERT INTO paper_authors VALUES "
 	paper_citations_query = "INSERT INTO paper_citations VALUES "
@@ -213,7 +213,7 @@ def publish_sql_structures (sql_con, sql_structures):
 	# releases (id -> (pubdate, pubtime? pubname))
 	releases_list = []
 	for rid, attrs in sql_structures['releases'].items():
-		releases_list.append('DEFAULT')
+		releases_list.append(rid)
 		releases_list.append(attrs[0])
 		if attrs[1]:
 			releases_list.append(attrs[1])
@@ -262,7 +262,7 @@ def publish_sql_structures (sql_con, sql_structures):
 	# papers id to (release id, title, abstract)
 	papers_list = []
 	for (pid, attrs) in sql_structures['papers'].items():
-		papers_list.append('DEFAULT')
+		papers_list.append(pid)
 		papers_list.append(attrs[0])
 		papers_list.append(attrs[1])
 		if attrs[2]:
@@ -330,9 +330,8 @@ def publish_sql_structures (sql_con, sql_structures):
 		cursor.execute(publishers_query, publishers_tuple)
 	if releases_tuple != ():
 		cursor.execute(releases_query, releases_tuple)
-	print(release_topics_query)
-	print(release_topics_tuple)
-	print(releases_tuple)
+	print(keyphrases_query)
+	print(keyphrases_tuple)
 	if release_topics_tuple != ():
 		cursor.execute(release_topics_query, release_topics_tuple)
 	if journals_tuple != ():

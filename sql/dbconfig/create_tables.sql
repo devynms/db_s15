@@ -29,7 +29,7 @@ CREATE TABLE publishers (
 );
 
 CREATE TABLE releases (
-	id              INTEGER NOT NULL AUTO_INCREMENT,
+	id              INTEGER NOT NULL,
     published_date  DATE NOT NULL,
     published_time  TIME NULL,
     publisher_name  VARCHAR (255) NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE conferences (
 );
 
 CREATE TABLE papers (
-	id				INTEGER NOT NULL AUTO_INCREMENT,
+	id				INTEGER NOT NULL,
     release_id		INTEGER NOT NULL,
     title			VARCHAR(255) NOT NULL,
     abstract		TEXT,

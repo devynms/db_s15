@@ -35,8 +35,9 @@ def create_citations():
 	while i > 0:
 		pipe = subprocess.Popen(["perl", "./mathgen.pl", "--product=article", "--mode=raw", "--output=./cit"])
 		pipe.communicate()
-		citations.append(find_author("./cit"))
+		citations.append(find_title("./cit"))
 		i -= 1
+	return citations
 
 
 def find_title(tex_article):
@@ -51,7 +52,7 @@ def find_abstract(tex_article):
 	return re.search('begin{abstract}(.|\n)*end{abstract}', article.read()).group()[15:-15]
 
 if __name__ == '__main__':
-	i = 100
+	i = 1
 	filename = argv[1]
 	citations = argv[2]
 	while i > 0:

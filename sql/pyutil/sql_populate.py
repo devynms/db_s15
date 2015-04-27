@@ -69,6 +69,12 @@ class AcademicPaper:
 		self.citations = citations
 		self.abstract = abstract
 
+def publish_papers_to_dbms(academic_papers, subtopics):
+	struct = sql_structures_from_papers(academic_papers, subtopics)
+	sql_con = _get_database_connection()
+	publish_sql_structures(sql_con, struct)
+	sql_con.close()
+
 # convert academic papers to a series of data structures that correspond to rows
 # in all the tables of the database schma being used.
 # see /sql/dbconfig/create_tables.sql for the schema
@@ -311,3 +317,21 @@ def publish_sql_structures (sql_con, sql_structures):
 		paper_keyphrases_list.append(attrs[0])
 		paper_keyphrases_list.append(attrs[1])
 	paper_keyphrases_tuple = tuple(paper_keyphrases_list)
+
+	# Perform Insertions
+	cursor = sql_con.cursor()
+	cursor.execute(topics_query, topics_tuple)
+	cursor.execute(authors_query, authors_tuple)
+	cursor.execute(publishers_query, publishers_tuple)
+	cursor.execute(releases_query, releases_tuple)
+	cursor.execute(release_topics_query, release_topics_tuple)
+	cursor.execute(journals_query, journals_tuple)
+	cursor.execute(conferences_query, conferences_tuple)
+	cursor.execute(papers_query, papers_tuple)
+	cursor.execute(paper_topics_query, paper_topics_tuple)
+	cursor.execute(paper_authors_query, paper_authors_tuple)
+	cursor.execute(paper_citations_query, paper_citations_tuple)
+	cursor.execute(keyphrases_query, keyphrases_tuple)
+	cursor.execute(paper_keyphrases_query, paper_keyphrases_tuple)
+	sql_con.commit()
+	cursor.close()

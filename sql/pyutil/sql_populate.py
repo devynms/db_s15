@@ -312,12 +312,13 @@ def publish_sql_structures (sql_con, sql_structures):
 
 	# paper_keyphrases (paper id, citations string)
 	for _ in range(len(sql_structures['paper_keyphrases']) - 1):
-		paper_keyphrases_query += "(%s, %s),"
-	paper_keyphrases_query += "(%s, %s);"
+		paper_keyphrases_query += "(%s, %s, %s),"
+	paper_keyphrases_query += "(%s, %s, %s);"
 	paper_keyphrases_list = []
 	for attrs in sql_structures['paper_keyphrases']:
 		paper_keyphrases_list.append(attrs[0])
 		paper_keyphrases_list.append(attrs[1])
+		paper_keyphrases_list.append(attrs[2])
 	paper_keyphrases_tuple = tuple(paper_keyphrases_list)
 
 	# Perform Insertions

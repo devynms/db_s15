@@ -122,9 +122,9 @@ def sql_structures_from_papers (academic_papers, subtopics):
 		# populate releases
 		release = paper.release
 		if release.id in struct['releases']:
-			if (release.pubdate, release.pubtime, release.publisher) != struct['releases'][release.id]:
+			if (release.pubdate, release.pubtime, release.publisher.name) != struct['releases'][release.id]:
 				raise
-		struct['releases'][release.id] = (release.pubdate, release.pubtime, release.publisher)
+		struct['releases'][release.id] = (release.pubdate, release.pubtime, release.publisher.name)
 		#		journals
 		if type(release) is Journal:
 			if release.id in struct['journals'] and (release.name, release.volume, release.issue) != struct['journals'][release.id]:
@@ -197,11 +197,11 @@ def publish_sql_structures (sql_con, sql_structures):
 	# publishers (name -> address)
 	publishers_list = []
 	for (name, addr) in sql_structures['publishers'].items():
-		publishers_list.add(name) # add name
+		publishers_list.append(name) # add name
 		if addr:
-			publishers_list.add(name)
+			publishers_list.append(name)
 		else:
-			publishers_list.add("NULL")
+			publishers_list.append("NULL")
 	publishers_tuple = tuple(publishers_list)
 	for _ in range(len(sql_structures['publishers'].items()) - 1):
 		publishers_query += "(%s, %s),"
@@ -209,7 +209,6 @@ def publish_sql_structures (sql_con, sql_structures):
 
 	# releases (id -> (pubdate, pubtime? pubname))
 	releases_list = []
-	print(sql_structures['releases'])
 	for rid, attrs in sql_structures['releases'].items():
 		releases_list.append(rid)
 		releases_list.append(attrs[0])

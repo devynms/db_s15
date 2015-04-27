@@ -2,7 +2,7 @@ import mysql.connector as sql
 import itertools
 
 def _get_database_connection ():
-	return sql.connect(user='root', password='apple516'	, database='Papers')
+	return sql.connect(user='root', password='password'	, database='db_s15')
 
 # name: a string of less than 255 chars
 # address: an optional string
@@ -165,28 +165,26 @@ def sql_structures_from_papers (academic_papers, subtopics):
 # take the sql structure (returned by sql_structures_from_papers, presumably) and
 # publish it to the database connected to by sql_con
 def publish_sql_structures (sql_con, sql_structures):
-	topics_query = "INSERT INTO topics VALUES "
-	topic_subtopics_query = "INSERT INTO topic_subtopics VALUES "
-	authors_query = "INSERT INTO authors VALUES "
-	publishers_query = "INSERT INTO publishers VALUES "
-	releases_query = "INSERT INTO releases VALUES "
-	release_topics_query = "INSERT INTO release_topics VALUES "
-	journals_query = "INSERT INTO journals VALUES "
-	conferences_query = "INSERT INTO conferences VALUES "
-	papers_query = "INSERT INTO papers VALUES "
-	paper_topics_query = "INSERT INTO paper_topics VALUES "
-	paper_authors_query = "INSERT INTO paper_authors VALUES "
-	paper_citations_query = "INSERT INTO paper_citations VALUES "
-	keyphrases_query = "INSERT INTO keyphrases VALUES "
-	paper_keyphrases_query = "INSERT INTO paper_keyphrases VALUES "
+	topics_query = "INSERT IGNORE INTO topics VALUES "
+	topic_subtopics_query = "INSERT IGNORE INTO topic_subtopics VALUES "
+	authors_query = "INSERT IGNORE INTO authors VALUES "
+	publishers_query = "INSERT IGNORE INTO publishers VALUES "
+	releases_query = "INSERT IGNORE INTO releases VALUES "
+	release_topics_query = "INSERT IGNORE INTO release_topics VALUES "
+	journals_query = "INSERT IGNORE INTO journals VALUES "
+	conferences_query = "INSERT IGNORE INTO conferences VALUES "
+	papers_query = "INSERT IGNORE INTO papers VALUES "
+	paper_topics_query = "INSERT IGNORE INTO paper_topics VALUES "
+	paper_authors_query = "INSERT IGNORE INTO paper_authors VALUES "
+	paper_citations_query = "INSERT IGNORE INTO paper_citations VALUES "
+	keyphrases_query = "INSERT IGNORE INTO keyphrases VALUES "
+	paper_keyphrases_query = "INSERT IGNORE INTO paper_keyphrases VALUES "
 
 	# topics
 	for _ in range(len(sql_structures['topics']) - 1):
 		topics_query += "(%s),"
 	topics_query += "(%s);"
-	print(sql_structures['topics'])
 	topics_tuple = tuple(sql_structures['topics'])
-	print(topics_tuple)
 
 	# topics_subtopics
 	# TODO
@@ -202,9 +200,9 @@ def publish_sql_structures (sql_con, sql_structures):
 	for (name, addr) in sql_structures['publishers'].items():
 		publishers_list.append(name) # add name
 		if addr:
-			publishers_list.append(name)
+			publishers_list.append(addr)
 		else:
-			publishers_list.append("NULL")
+			publishers_list.append(None)
 	publishers_tuple = tuple(publishers_list)
 	for _ in range(len(sql_structures['publishers'].items()) - 1):
 		publishers_query += "(%s, %s),"
@@ -218,7 +216,7 @@ def publish_sql_structures (sql_con, sql_structures):
 		if attrs[1]:
 			releases_list.append(attrs[1])
 		else:
-			releases_list.append("NULL")
+			releases_list.append(None)
 		releases_list.append(attrs[2])
 	releases_tuple = tuple(releases_list)
 	for _ in range(len(sql_structures['releases'].items()) - 1):
@@ -268,7 +266,7 @@ def publish_sql_structures (sql_con, sql_structures):
 		if attrs[2]:
 			papers_list.append(attrs[2])
 		else:
-			papers_list.append("NULL")
+			papers_list.append(None)
 	papers_tuple = tuple(papers_list)
 	for _ in range(len(sql_structures['papers'].items()) - 1):
 		papers_query += "(%s, %s, %s, %s),"
@@ -331,8 +329,6 @@ def publish_sql_structures (sql_con, sql_structures):
 		cursor.execute(publishers_query, publishers_tuple)
 	if releases_tuple != ():
 		cursor.execute(releases_query, releases_tuple)
-	print(keyphrases_query)
-	print(keyphrases_tuple)
 	if release_topics_tuple != ():
 		cursor.execute(release_topics_query, release_topics_tuple)
 	if journals_tuple != ():

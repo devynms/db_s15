@@ -112,7 +112,7 @@ def sql_structures_from_papers (academic_papers, subtopics):
 			struct['authors'].add(paper_author)
 		# populate publishers
 		pub = paper.release.publisher
-		if pub.name in struct['publishers']:
+		if pub.name not in struct['publishers']:
 			if struct['publishers'][pub.name] == None:
 				struct['publishers'][pub.name] = pub.address
 			elif struct['publishers'][pub.name] != pub.address:
@@ -124,7 +124,7 @@ def sql_structures_from_papers (academic_papers, subtopics):
 		if release.id in struct['releases']:
 			if (release.pubdate, release.pubtime, release.publisher) != struct['releases'][release.id]:
 				raise
-		struct['releases']['releaseid'] = (release.pubdate, release.pubtime, release.publisher)
+		struct['releases'][release.id] = (release.pubdate, release.pubtime, release.publisher)
 		#		journals
 		if type(release) is Journal:
 			if release.id in struct['journals'] and (release.name, release.volume, release.issue) != struct['journals'][release.id]:

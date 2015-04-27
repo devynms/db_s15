@@ -8,8 +8,16 @@ do
 	python scraper.py "./paper/test.txt" "_" > ./test.txt
 	cd ..
 	mv ./scraper/test.txt ./test.txt
-	papers[$a] = $(cat ./test.txt)
+	if [ $a -lt 9 ]
+	then
+		papers[$a]="$(cat ./test.txt),"
+	else
+		papers[$a]="$(cat ./test.txt)"
+	fi
 	#python ./data_generation.py
   a=`expr $a + 1`
 done
-python ./data_generation.py papers
+echo '[' > ./test.txt
+echo ${papers[@]} >> ./test.txt
+echo ']' >> ./test.txt
+python ./data_generation.py

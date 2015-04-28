@@ -23,7 +23,7 @@ class Release(object):
 		if name not in Release.name_id:
 			self.id = Release.next_id
 			Release.next_id += 1
-			name_id[name] = self.id
+			Release.name_id[name] = self.id
 		else:
 			self.id = name_id[name]
 		self.publisher = publisher

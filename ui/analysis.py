@@ -65,6 +65,24 @@ def get_papers_sharing_topics(conn, paper_title):
 	cursor.close()
 	return titles
 
+def get_authors_from_journal(conn, journal_name):
+	query = (
+		'SELECT paper_authors.author_name '
+		'FROM paper_authors '
+		'JOIN papers '
+		'ON papers.id = paper_authors.paper_id '
+		'JOIN journals '
+		'ON journals.release_id = papers.release_id '
+		'WHERE journals.name = "%s";')
+	args = (journal_name)
+	authors = []
+	cursor = conn.cursor()
+	cursor.execute(query, args)
+	for (name,) in cursor:
+		authors.append(name)
+	cursor.close()
+	return authors
+
 def find_paper_correlation_by_topic(conn, paper_1, paper_2):
 	query = (
 		'SELECT paper_topics.topic'

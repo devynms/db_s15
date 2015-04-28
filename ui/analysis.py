@@ -2,19 +2,20 @@ import mysql.connector as sql
 import itertools
 
 def _get_database_connection ():
-	return sql.connect(user='root', password='apple516', database='Papers')
+	return sql.connect(user='root', password='password', database='db_s15')
 
 def conn():
 	return _get_database_connection()
 
 def get_papers_from_journal(conn, journal_name):
 	query = (
-		'SELECT papers.title '
-		'FROM papers '
-		'JOIN journals '
-		'ON journals.release_id = papers.release_id '
-		'WHERE journals.name <> "%s";')
-	args = (journal_name)
+		"""SELECT papers.title 
+		FROM papers 
+		JOIN journals 
+		ON journals.release_id = papers.release_id 
+		WHERE journals.name = (%s);""")
+	args = tuple([journal_name])
+	print (query, args)
 	titles = []
 	cursor = conn.cursor()
 	cursor.execute(query, args)
@@ -34,8 +35,8 @@ def get_papers_with_same_authors(conn, paper_title):
 		'	FROM paper_authors '
 		'	JOIN papers '
 		'	ON papers.id = paper_authors.paper_id '
-		'	WHERE papers.title = "%s");')
-	args = (paper_title)
+		'	WHERE papers.title = (%s));')
+	args = tuple([paper_title])
 	titles = []
 	cursor = conn.cursor()
 	cursor.execute(query, args)
@@ -46,15 +47,17 @@ def get_papers_with_same_authors(conn, paper_title):
 
 def get_papers_sharing_topics(conn, paper_title):
 	query = (
-		'SELECT P.title '
-		'FROM papers P, paper_topics PT '
-		'WHERE P.id = PT.paper_id '
-		'and PT.topic in ('
-		'	SELECT PT2.topic '
-		'	FROM paper_topics PT2, papers P2 '
-		'	WHERE P2.id = PT2.paper_id '
-		'	and P2.title = "%s");')
-	args = (paper_title)
+		'SELECT papers.title '
+		'FROM papers '
+		'JOIN paper_topics '
+		'ON papers.id = paper_topics.paper_id '
+		'WHERE paper_topics.topic IN ('
+		'	SELECT paper_topics.topic '
+		'	FROM paper_topics '
+		'	JOIN papers '
+		'	ON papers.id = paper_topics.paper_id '
+		'	WHERE papers.title = (%s));')
+	args = tuple([paper_title])
 	titles = []
 	cursor = conn.cursor()
 	cursor.execute(query, args)
@@ -71,8 +74,8 @@ def get_authors_from_journal(conn, journal_name):
 		'ON papers.id = paper_authors.paper_id '
 		'JOIN journals '
 		'ON journals.release_id = papers.release_id '
-		'WHERE journals.name = "%s";')
-	args = (journal_name)
+		'WHERE journals.name = (%s);')
+	args = tuple([journal_name])
 	authors = []
 	cursor = conn.cursor()
 	cursor.execute(query, args)
@@ -81,17 +84,17 @@ def get_authors_from_journal(conn, journal_name):
 	cursor.close()
 	return authors
 
-def find_paper_correlation_by_topic(conn, paper_1, paper_2):
+def find_paper_correlation_by_topic(conn, paper_1):
 	query = (
-		'(SELECT paper_topics.topic '
+		'SELECT paper_topics.topic '
 		'FROM paper_topics, papers '
-		'WHERE paper_topics.paper_id = papers.id and papers.title = "%s") '
-		'EXCEPT '
-		'(SELECT paper_topics.topic '
-		'FROM paper_topics, papers '
-		'WHERE paper_topics.paper_id = papers.id and papers.title = "%s");'
+		'WHERE paper_topics.paper_id = papers.id AND papers.title = (%s);'
+		#'EXCEPT '
+		#'(SELECT paper_topics.topic '
+		#'FROM paper_topics, papers '
+		#'WHERE paper_topics.paper_id = papers.id and papers.title = (%s));'
 		)
-	args = (paper_1, paper_2)
+	args = (paper_1,)
 	topics = []
 	cursor = conn.cursor()
 	cursor.execute(query, args)

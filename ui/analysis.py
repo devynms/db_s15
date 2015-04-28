@@ -43,3 +43,22 @@ def get_papers_with_same_authors(conn, paper_title):
 		titles.append(title)
 	cursor.close()
 	return titles
+
+def find_paper_correlation_by_topic(conn, paper_1, paper_2):
+	query = (
+		'SELECT paper_topics.topic'
+		'FROM paper_topics, papers'
+		'WHERE paper_topics.paper_id = papers.id and papers.title = %s'
+		'EXCEPT'
+		'SELECT paper_topics.topic'
+		'FROM paper_topics, papers'
+		'WHERE paper_topics.paper_id = papers.id and papers.title = %s;'
+		)
+	args = (paper_1, paper_2)
+	topics = []
+	cursor = conn.cursor()
+	cursor.execute(query, args)
+	for (topic,) in cursor:
+		topics.append(title)
+	cursor.close()
+	return 1 - .2 * len(topics)

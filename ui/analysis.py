@@ -2,7 +2,7 @@ import mysql.connector as sql
 import itertools
 
 def _get_database_connection ():
-	return sql.connect(user='root', password='password', database='db_s15')
+	return sql.connect(user='root', password='apple516', database='Papers')
 
 def conn():
 	return _get_database_connection()
@@ -46,16 +46,14 @@ def get_papers_with_same_authors(conn, paper_title):
 
 def get_papers_sharing_topics(conn, paper_title):
 	query = (
-		'SELECT papers.title '
-		'FROM papers '
-		'JOIN paper_topics '
-		'ON papers.id = paper_topics.paper_id '
-		'WHERE paper_topics.topic in ('
-		'	SELECT paper_topics.topic '
-		'	FROM paper_topics '
-		'	JOIN papers '
-		'	ON papers.id = paper_topics.paper_id '
-		'	WHERE papers.title = "%s");')
+		'SELECT P.title '
+		'FROM papers P, paper_topics PT '
+		'WHERE P.id = PT.paper_id '
+		'and PT.topic in ('
+		'	SELECT PT2.topic '
+		'	FROM paper_topics PT2, papers P2 '
+		'	WHERE P2.id = PT2.paper_id '
+		'	and P2.title = "%s");')
 	args = (paper_title)
 	titles = []
 	cursor = conn.cursor()
@@ -67,13 +65,13 @@ def get_papers_sharing_topics(conn, paper_title):
 
 def find_paper_correlation_by_topic(conn, paper_1, paper_2):
 	query = (
-		'SELECT paper_topics.topic'
-		'FROM paper_topics, papers'
-		'WHERE paper_topics.paper_id = papers.id and papers.title = %s'
-		'EXCEPT'
-		'SELECT paper_topics.topic'
-		'FROM paper_topics, papers'
-		'WHERE paper_topics.paper_id = papers.id and papers.title = %s;'
+		'(SELECT paper_topics.topic '
+		'FROM paper_topics, papers '
+		'WHERE paper_topics.paper_id = papers.id and papers.title = "%s") '
+		'EXCEPT '
+		'(SELECT paper_topics.topic '
+		'FROM paper_topics, papers '
+		'WHERE paper_topics.paper_id = papers.id and papers.title = "%s");'
 		)
 	args = (paper_1, paper_2)
 	topics = []

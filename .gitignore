@@ -1,4 +1,4 @@
+*.pyc
 scraper/cit
 scraper/paper/test.txt
-sql/pyutil/sql_populate.pyc
 test.txt

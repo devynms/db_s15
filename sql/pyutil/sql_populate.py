@@ -25,7 +25,7 @@ class Release(object):
 			Release.next_id += 1
 			Release.name_id[name] = self.id
 		else:
-			self.id = name_id[name]
+			self.id = Release.name_id[name]
 		self.publisher = publisher
 		self.pubdate = pubdate
 		self.pubtime = pubtime

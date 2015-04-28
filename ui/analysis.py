@@ -34,7 +34,28 @@ def get_papers_with_same_authors(conn, paper_title):
 		'	FROM paper_authors '
 		'	JOIN papers '
 		'	ON papers.id = paper_authors.paper_id '
-		'	WHERE papers.title <> "%s");')
+		'	WHERE papers.title = "%s");')
+	args = (paper_title)
+	titles = []
+	cursor = conn.cursor()
+	cursor.execute(query, args)
+	for (title,) in cursor:
+		titles.append(title)
+	cursor.close()
+	return titles
+
+def get_papers_sharing_topics(conn, paper_title):
+	query = (
+		'SELECT papers.title '
+		'FROM papers '
+		'JOIN paper_topics '
+		'ON papers.id = paper_topics.paper_id '
+		'WHERE paper_topics.topic in ('
+		'	SELECT paper_topics.topic '
+		'	FROM paper_topics '
+		'	JOIN papers '
+		'	ON papers.id = paper_topics.paper_id '
+		'	WHERE papers.title = "%s");')
 	args = (paper_title)
 	titles = []
 	cursor = conn.cursor()

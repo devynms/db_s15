@@ -17,10 +17,15 @@ class Publisher:
 # topics: an array of primary topics
 class Release(object):
 	next_id = 0
+	name_id = {}
 
-	def __init__(self, publisher, pubdate, pubtime = None, topics = []):
-		self.id = Release.next_id
-		Release.next_id += 1
+	def __init__(self, name, publisher, pubdate, pubtime = None, topics = []):
+		if name not in Release.name_id:
+			self.id = Release.next_id
+			Release.next_id += 1
+			name_id[name] = self.id
+		else:
+			self.id = name_id[name]
 		self.publisher = publisher
 		self.pubdate = pubdate
 		self.pubtime = pubtime
@@ -32,7 +37,7 @@ class Release(object):
 # issue: an integer for issue
 class Journal(Release):
 	def __init__(self, name, volume, issue, publisher, pubdate, pubtime = None, topics = []):
-		super(Journal, self).__init__(publisher, pubdate, pubtime, topics)
+		super(Journal, self).__init__(name, publisher, pubdate, pubtime, topics)
 		self.name = name
 		self.volume = volume
 		self.issue = issue
@@ -42,7 +47,7 @@ class Journal(Release):
 # speaker: an optional string of 255 chars or less representing the speaker's name
 class Conference(Release):
 	def __init__(self, name, location, publisher, pubdate, speaker = None, pubtime = None, topics = []):
-		super(Conference, self).__init__(publisher, pubdate, pubtime, topics, subtopics)
+		super(Conference, self).__init__(name, publisher, pubdate, pubtime, topics, subtopics)
 		self.name = name
 		self.location = location
 		self.speaker = speaker
